@@ -275,9 +275,9 @@ static inline cputime64_t get_cpu_idle_time(
 	return idle_time;
 }
 
-static void cpufreq_interactive_timer_resched(
-	struct cpufreq_interactive_cpuinfo *pcpu)
+static void cpufreq_interactive_timer_resched(unsigned long cpu)
 {
+	struct cpufreq_interactive_cpuinfo *pcpu = &per_cpu(cpuinfo, cpu);
 	struct cpufreq_interactive_tunables *tunables =
 		pcpu->policy->governor_data;
 	unsigned long expires;
@@ -298,12 +298,16 @@ static void cpufreq_interactive_timer_resched(
 	pcpu->cputime_speedadj = 0;
 	pcpu->cputime_speedadj_timestamp = pcpu->time_in_idle_timestamp;
 	expires = jiffies + usecs_to_jiffies(tunables->timer_rate);
-	mod_timer_pinned(&pcpu->cpu_timer, expires);
+	del_timer(&pcpu->cpu_timer);
+	pcpu->cpu_timer.expires = expires;
+	add_timer_on(&pcpu->cpu_timer, cpu);
 
 	if (tunables->timer_slack_val >= 0 &&
 	    pcpu->target_freq > pcpu->policy->min) {
 		expires += usecs_to_jiffies(tunables->timer_slack_val);
-		mod_timer_pinned(&pcpu->cpu_slack_timer, expires);
+		del_timer(&pcpu->cpu_slack_timer);
+		pcpu->cpu_slack_timer.expires = expires;
+		add_timer_on(&pcpu->cpu_slack_timer, cpu);
 	}
 
 	spin_unlock_irqrestore(&pcpu->load_lock, flags);
@@ -328,6 +332,7 @@ static void cpufreq_interactive_timer_start(
 #endif
 		return;
 
+	spin_lock_irqsave(&pcpu->load_lock, flags);
 	pcpu->cpu_timer.expires = expires;
 	add_timer_on(&pcpu->cpu_timer, cpu);
 	if (tunables->timer_slack_val >= 0 &&
@@ -337,7 +342,6 @@ static void cpufreq_interactive_timer_start(
 		add_timer_on(&pcpu->cpu_slack_timer, cpu);
 	}
 
-	spin_lock_irqsave(&pcpu->load_lock, flags);
 	pcpu->time_in_idle =
 		get_cpu_idle_time(cpu, &pcpu->time_in_idle_timestamp,
 				  tunables->io_is_busy);
@@ -832,7 +836,7 @@ rearm_if_notmax:
 
 rearm:
 	if (!timer_pending(&pcpu->cpu_timer))
-		cpufreq_interactive_timer_resched(pcpu);
+		cpufreq_interactive_timer_resched(data);
 
 exit:
 	up_read(&pcpu->enable_sem);
@@ -864,7 +868,7 @@ static void cpufreq_interactive_idle_start(void)
 		 * the CPUFreq driver.
 		 */
 		if (!pending)
-			cpufreq_interactive_timer_resched(pcpu);
+			cpufreq_interactive_timer_resched(smp_processor_id());
 	}
 
 	up_read(&pcpu->enable_sem);
@@ -884,7 +888,7 @@ static void cpufreq_interactive_idle_end(void)
 
 	/* Arm the timer for 1-2 ticks later if not already. */
 	if (!timer_pending(&pcpu->cpu_timer)) {
-		cpufreq_interactive_timer_resched(pcpu);
+		cpufreq_interactive_timer_resched(smp_processor_id());
 	} else if (time_after_eq(jiffies, pcpu->cpu_timer.expires)) {
 		del_timer(&pcpu->cpu_timer);
 		del_timer(&pcpu->cpu_slack_timer);
@@ -2461,7 +2465,7 @@ static int cpufreq_governor_interactive(struct cpufreq_policy *policy,
 				down_write(&pcpu->enable_sem);
 				del_timer_sync(&pcpu->cpu_timer);
 				del_timer_sync(&pcpu->cpu_slack_timer);
-				cpufreq_interactive_timer_start(tunables, j);
+				cpufreq_interactive_timer_resched(j);
 				up_write(&pcpu->enable_sem);
 			}
 
