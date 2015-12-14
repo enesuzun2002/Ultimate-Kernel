@@ -231,6 +231,7 @@ config CPU_FREQ_DEFAULT_GOV_SCHED
 	  Use the CPUfreq governor 'sched' as default. This scales
 	  cpu frequency from the scheduler as per-entity load tracking
 	  statistics are updated.
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
