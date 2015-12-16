@@ -421,6 +421,9 @@ extern struct cpufreq_governor cpufreq_gov_interactive;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_NEXUS)
 extern struct cpufreq_governor cpufreq_gov_nexus;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_nexus)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_SCHED)
+extern struct cpufreq_governor cpufreq_gov_sched;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_sched)
 #endif
 
 /*********************************************************************
