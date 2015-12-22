@@ -35,6 +35,27 @@ extern unsigned int sysctl_sched_latency;
 extern unsigned int sysctl_sched_min_granularity;
 extern unsigned int sysctl_sched_wakeup_granularity;
 extern unsigned int sysctl_sched_child_runs_first;
+extern unsigned int sysctl_sched_wake_to_idle;
+extern unsigned int sysctl_sched_capacity_margin;
+extern unsigned int sysctl_sched_window_stats_policy;
+extern unsigned int sysctl_sched_account_wait_time;
+extern unsigned int sysctl_sched_ravg_hist_size;
+extern unsigned int sysctl_sched_cpu_high_irqload;
+extern unsigned int sysctl_sched_freq_account_wait_time;
+extern unsigned int sysctl_sched_migration_fixup;
+extern unsigned int sysctl_sched_heavy_task_pct;
+extern unsigned int sysctl_sched_enable_power_aware;
+
+#if defined(CONFIG_SCHED_FREQ_INPUT) || defined(CONFIG_SCHED_HMP)
+extern unsigned int sysctl_sched_init_task_load_pct;
+#endif
+
+#ifdef CONFIG_SCHED_FREQ_INPUT
+extern int sysctl_sched_freq_inc_notify;
+extern int sysctl_sched_freq_dec_notify;
+#endif
+
+#define sysctl_sched_enable_hmp_task_placement 0
 
 enum sched_tunable_scaling {
 	SCHED_TUNABLESCALING_NONE,
