@@ -135,6 +135,7 @@ static atomic_t extra_vsync_wait;
 
 static void tracing_mark_write( int pid, char id, char* str1, int value )
 {
+#ifdef CONFIG_TRACING
 	char buf[80];
 
 	if(!pid) return;
@@ -154,6 +155,7 @@ static void tracing_mark_write( int pid, char id, char* str1, int value )
 	}
 
 	trace_puts(buf);
+#endif
 }
 /*-----------------------------------------------------------------*/
 
