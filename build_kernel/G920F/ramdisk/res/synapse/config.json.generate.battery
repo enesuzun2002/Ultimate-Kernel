@@ -1,0 +1,215 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+    name:Battery,
+    elements:[
+	{ SDescription:{ 
+		description:"Device charging currents are composed of input current coming into the device (Nominal 5V) and charge current fed to the battery (Battery Charge Voltage). Charger detection divides charging cable types into several categories as described below. If charging current exceeds input load, then charging current is dynamically adjusted. For avoiding battery deterioration, charging currents of less than 0.7 Coloumb are advised; ex. 2600mAh (Capacity) * 0.7C = ~1820mA."
+	}},
+	{ SLiveLabel:{
+                  action:"charge-source"
+        }},
+	{ SLiveLabel:{
+                  action:"echo \"Input: \$(cat /sys/devices/platform/sec-battery/power_supply/battery/current_max)mA\""
+        }},
+	{ SLiveLabel:{
+                  action:"echo \"Average: \$(cat /sys/devices/platform/sec-battery/power_supply/battery/current_avg)mA\""
+        }},
+	{ SLiveLabel:{
+                  action:"echo \"Now: \$(cat /sys/devices/platform/sec-battery/power_supply/battery/current_now)mA\""
+        }},
+
+	{ SDescription:{ 
+		description:"Input is the live current limit coming through the USB port into the device at 5V. Charge is the desired target current to charge the battery. Now is the actual current limit applied to the battery."
+	}},
+	
+
+	{ SPane:{ 
+		title:"Charging logic",
+	}},
+	{ SCheckBox:{
+		description:"If disabled, the charger chip will ignore unstable currents. Use at risk of your charger or charging ports. Unstable power detection will reduce the input current until a stable voltage from the power source is achieved.",
+		label:"Unstable power detection",
+		default:`cat /sys/devices/platform/sec-battery/unstable_power_detection`,
+                action:"generic /sys/devices/platform/sec-battery/unstable_power_detection"
+	}},
+
+
+
+	{ SPane:{
+		title:"AC/Mains",
+		description:"AC or mains current limits applied to designated dedicated chargers and corresponding cables."
+	}},
+	{ SSeekBar:{
+		title:"AC/Mains Input Current",
+		min:400, max:3000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/ac_input_curr`,
+                action:"generic /sys/devices/platform/sec-battery/ac_input_curr"
+	}},
+	{ SSeekBar:{
+		title:"AC/Mains Charge Current",
+		description:"AC or mains charge current supplied to battery during charging.",
+		min:400, max:3000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/ac_input_curr`,
+                action:"generic /sys/devices/platform/sec-battery/ac_chrg_curr"
+	}},
+
+	{ SDescription:{
+		description:"Input and charging current are limited to certain maximas if the screen is turned on to avoid elevated heat generation. Normal charging limits are applied when the screen is off."
+	}},
+
+	{ SSeekBar:{
+		title:"AC/Mains Input Current (Screen-on)",
+		min:400, max:3000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/siop_input_limit`,
+                action:"generic /sys/devices/platform/sec-battery/siop_input_limit"
+	}},
+	{ SSeekBar:{
+		title:"AC/Mains Charge Current (Screen-on)",
+		min:400, max:3000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/siop_charge_limit`,
+                action:"generic /sys/devices/platform/sec-battery/siop_charge_limit"
+	}},
+
+
+
+	{ SPane:{ 
+		title:"Standard Downstream Port",
+		description:"Standard Downstream Port current limits applied on plain and compliant USB data connectivity ports."
+	}},
+	{ SSeekBar:{
+		title:"SDP Input Current",
+		min:400, max:1500, unit:"mA", step:25,
+		default:`cat /sys/devices/platform/sec-battery/sdp_input_curr`,
+                action:"generic /sys/devices/platform/sec-battery/sdp_input_curr"
+	}},
+	{ SSeekBar:{
+		title:"SDP Charge Current",
+		description:"NOTE: SDP charge limit serves as a global minima for ALL charge currents except MHL currents, overriding their respective value if they are inferior!",
+		min:400, max:1500, unit:"mA", step:25,
+		default:`cat /sys/devices/platform/sec-battery/sdp_chrg_curr`,
+                action:"generic /sys/devices/platform/sec-battery/sdp_chrg_curr"
+	}},
+
+
+
+	{ SPane:{ 
+		title:"Dedicated Charging Port",
+		description:"Dedicated Charging Port current limits applied when detection of a standalone charger happens, or if a USB connector with shorted D+ and D- pins is attached."
+	}},
+	{ SSeekBar:{
+		title:"DCP Input Current",
+		min:400, max:2000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/dcp_input_curr`,
+                action:"generic /sys/devices/platform/sec-battery/dcp_input_curr"
+	}},
+	{ SSeekBar:{
+		title:"DCP Charge Current",
+		min:400, max:2000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/dcp_chrg_curr`,
+                action:"generic /sys/devices/platform/sec-battery/dcp_chrg_curr"
+	}},
+
+
+
+	{ SPane:{ 
+		title:"Charging Downstream Port",
+		description:"Charging Downstream Port current limits applied on BCS 1.1 special charging USB data connectivity ports."
+	}},
+	{ SSeekBar:{
+		title:"CDP Input Current",
+		min:400, max:1500, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/cdp_input_curr`,
+                action:"generic /sys/devices/platform/sec-battery/cdp_input_curr"
+	}},
+	{ SSeekBar:{
+		title:"CDP Charge Current",
+		min:400, max:1500, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/cdp_chrg_curr`,
+                action:"generic /sys/devices/platform/sec-battery/cdp_chrg_curr"
+	}},
+
+
+
+	{ SPane:{ 
+		title:"Accessory Charging Adapter",
+		description:"Accessory Charging Adapter current limits applied to various dedicated USB accessories."
+	}},
+	{ SSeekBar:{
+		title:"ACA Input Current",
+		min:100, max:1000, unit:"mA", step:25,
+		default:`cat /sys/devices/platform/sec-battery/aca_input_curr`,
+                action:"generic /sys/devices/platform/sec-battery/aca_input_curr"
+	}},
+	{ SSeekBar:{
+		title:"ACA Charge Current",
+		min:100, max:1000, unit:"mA", step:25,
+		default:`cat /sys/devices/platform/sec-battery/aca_chrg_curr`,
+                action:"generic /sys/devices/platform/sec-battery/aca_chrg_curr"
+	}},
+
+
+
+	{ SPane:{ 
+		title:"Miscellaneous charging",
+		description:"Miscaenellous current limits applied to any other unidentifiable charging source."
+	}},
+	{ SSeekBar:{
+		title:"Misc Input Current",
+		min:100, max:2000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/misc_input_curr`,
+                action:"generic /sys/devices/platform/sec-battery/misc_input_curr"
+	}},
+	{ SSeekBar:{
+		title:"Misc Charge Current",
+		min:100, max:2000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/misc_chrg_curr`,
+                action:"generic /sys/devices/platform/sec-battery/misc_chrg_curr"
+	}},
+
+
+
+	{ SPane:{ 
+		title:"Wireless charging",
+		description:"Wireless input current limit applied to the wireless charging port."
+	}},
+	{ SSeekBar:{
+		title:"Wireless Charge Current",
+		min:100, max:1500, unit:"mA", step:25,
+		default:`cat /sys/devices/platform/sec-battery/wpc_chrg_curr`,
+                action:"generic /sys/devices/platform/sec-battery/wpc_chrg_curr"
+	}}
+
+
+	{ SPane:{ 
+		title:"MHL power",
+		description:"Mobile High-Definition Link power sources."
+	}},
+	{ SSeekBar:{
+		title:"500mA MHL Class",
+		min:300, max:1000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/mhl_500_curr`,
+                action:"generic /sys/devices/platform/sec-battery/mhl_500_curr"
+	}},
+	{ SSeekBar:{
+		title:"900mA MHL Class",
+		min:300, max:1500, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/mhl_900_curr`,
+                action:"generic /sys/devices/platform/sec-battery/mhl_900_curr"
+	}},
+	{ SSeekBar:{
+		title:"1500mA MHL Class",
+		min:300, max:2000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/mhl_1500_curr`,
+                action:"generic /sys/devices/platform/sec-battery/mhl_1500_curr"
+	}},
+	{ SSeekBar:{
+		title:"USB powered MHL adapter",
+		min:300, max:2000, unit:"mA", step:50,
+		default:`cat /sys/devices/platform/sec-battery/mhl_usb_curr`,
+                action:"generic /sys/devices/platform/sec-battery/mhl_usb_curr"
+	}},
+    ]
+}
+CTAG

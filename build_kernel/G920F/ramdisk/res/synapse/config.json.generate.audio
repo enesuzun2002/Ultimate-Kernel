@@ -1,0 +1,184 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+    name:Audio,
+    elements:[
+	{ SPane:{ 
+		title:"Jack Media Volume Control",
+		description:"Jack amplification increases volume only on headphones and headsets. The controlled input is the digital input volume for the audio DAC. Only audio considered as <Media playback> by the default ALSA profiles will be amplified."
+	}},
+	{ SSeekBar:{
+		description:"Jack left channel volume",
+		min:80, max:150, unit:"dB", weight:0.5, offset:128,
+		default:`cat /sys/class/misc/arizona_control/hp_left_dvol`,
+                action:"generic /sys/class/misc/arizona_control/hp_left_dvol"
+	}},
+	{ SSeekBar:{
+		description:"Jack right channel volume",
+		min:80, max:150, unit:"dB", weight:0.5, offset:128,
+		default:`cat /sys/class/misc/arizona_control/hp_right_dvol`,
+                action:"generic /sys/class/misc/arizona_control/hp_right_dvol"
+	}},
+	{ SCheckBox:{
+		description:"Mixes together left and right channels on the jack output.",
+		label:"Mono Mixer",
+		default:`cat /sys/class/misc/arizona_control/switch_hp_mono`,
+                action:"generic /sys/class/misc/arizona_control/switch_hp_mono"
+	}},
+	
+	
+
+	{ SPane:{ 
+		title:"Speaker Volume Control",
+		description:"Speaker amplification increases volume on the earpiece. Speaker volumes are expressed as deltas to Samsung's audio profiles, so not to completely override them."
+	}},
+	{ SSeekBar:{
+		title:"Earpiece speaker volume",
+		min:-8, max:16, unit:"dB", weight:0.5,
+		default:`cat /sys/class/misc/arizona_control/ep_dvol`,
+                action:"generic /sys/class/misc/arizona_control/ep_dvol"
+	}},
+	
+	
+	
+	{ SPane:{ 
+		title:"Main Equalizer (Combined / Left Channel)",
+		description:"The controls use the audio SoC's integrated hardware equalizers."
+	}},
+	{ SCheckBox:{
+		label:"Enable Equalizer",
+		default:`cat /sys/class/misc/arizona_control/switch_eq_hp`,
+                action:"generic /sys/class/misc/arizona_control/switch_eq_hp"
+	}},
+	{ SSeekBar:{
+		title:"Band 1 gain",
+		description:"Cutoff-frequency: 25 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpl_gain_1`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_1"
+	}},
+	{ SSeekBar:{
+		title:"Band 2 gain",
+		description:"Center-frequency: 200 Hz, bandwidth: 100 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpl_gain_2`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_2"
+	}},
+	{ SSeekBar:{
+		title:"Band 3 gain",
+		description:"Center-frequency: 500 Hz, bandwidth: 250 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpl_gain_3`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_3"
+	}},
+	{ SSeekBar:{
+		title:"Band 4 gain",
+		description:"Center-frequency: 1000 Hz, bandwidth: 500 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpl_gain_4`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_4"
+	}},
+	{ SSeekBar:{
+		title:"Band 5 gain",
+		description:"Center-frequency: 2000 Hz, bandwidth: 1000 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpl_gain_5`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_5"
+	}},
+	{ SSeekBar:{
+		title:"Band 6 gain",
+		description:"Center-frequency: 4000 Hz, bandwidth: 2000 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpl_gain_6`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_6"
+	}},
+	{ SSeekBar:{
+		title:"Band 7 gain",
+		description:"Center-frequency: 8000 Hz, bandwidth: 4000 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpl_gain_7`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_7"
+	}},
+	{ SSeekBar:{
+		title:"Band 8 gain",
+		description:"Cutoff-frequency: 16000 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpl_gain_8`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_8"
+	}},
+	
+	
+	
+	
+	
+	{ SPane:{ 
+		title:"Advanced Stereo Equalizer (Right Channel)",
+	}},
+	
+	{ SCheckBox:{
+		description:"Uses separate gain values for left and right audio channels that can be then individually controlled.",
+		label:"Enable Per-Channel Controls",
+		default:`cat /sys/class/misc/arizona_control/switch_eq_hp_per_ch`,
+                action:"generic /sys/class/misc/arizona_control/switch_eq_hp_per_ch"
+	}},
+	
+	{ SSeekBar:{
+		title:"Band 1 gain",
+		description:"Cutoff-frequency: 25 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpr_gain_1`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_1"
+	}},
+	{ SSeekBar:{
+		title:"Band 2 gain",
+		description:"Center-frequency: 200 Hz, bandwidth: 100 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpr_gain_2`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_2"
+	}},
+	{ SSeekBar:{
+		title:"Band 3 gain",
+		description:"Center-frequency: 500 Hz, bandwidth: 250 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpr_gain_3`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_3"
+	}},
+	{ SSeekBar:{
+		title:"Band 4 gain",
+		description:"Center-frequency: 1000 Hz, bandwidth: 500 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpr_gain_4`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_4"
+	}},
+	{ SSeekBar:{
+		title:"Band 5 gain",
+		description:"Center-frequency: 2000 Hz, bandwidth: 1000 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpr_gain_5`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_5"
+	}},
+	{ SSeekBar:{
+		title:"Band 6 gain",
+		description:"Center-frequency: 4000 Hz, bandwidth: 2000 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpr_gain_6`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_6"
+	}},
+	{ SSeekBar:{
+		title:"Band 7 gain",
+		description:"Center-frequency: 8000 Hz, bandwidth: 4000 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpr_gain_7`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_7"
+	}},
+	{ SSeekBar:{
+		title:"Band 8 gain",
+		description:"Cutoff-frequency: 16000 Hz",
+		min:-12, max:12, unit:"dB",
+		default:`cat /sys/class/misc/arizona_control/eq_hpr_gain_8`,
+                action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_8"
+	}},
+    ]
+}
+CTAG

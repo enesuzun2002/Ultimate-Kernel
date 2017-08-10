@@ -1,0 +1,55 @@
+#
+# UNIVERSAL DUMPER
+# <dumping>
+# Copyright (c) 2016 thehacker911 <maikdiebenkorn@gmail.com>
+#
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+
+BB=/system/xbin/busybox;
+
+if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
+	$BB mount -o remount,rw /;
+fi;
+
+KERNELDUMP=`sed -n '2p' /res/dumping/vars`
+MODEMDUMP=`sed -n '3p' /res/dumping/vars`
+SYSTEMDUMP=`sed -n '4p' /res/dumping/vars`
+RECOVERYDUMP=`sed -n '5p' /res/dumping/vars`
+P=/sdcard
+
+case $1 in
+kernel)
+  dd if=$KERNELDUMP of=$P/boot.img
+  $BB chmod 4755 $P/boot.img
+  ;;
+kernelzip)
+  $BB nohup $BB sh /res/dumping/zip_kernel.sh > /dev/null 2>&1;
+  echo Done!
+  ;; 
+modem)
+  dd if=$MODEMDUMP of=$P/modem.bin
+  $BB chmod 4755 $P/modem.bin
+  ;;
+modemzip)
+  $BB nohup $BB sh /res/dumping/zip_modem.sh > /dev/null 2>&1;
+  echo Done!
+  ;;   
+system)
+  dd if=$SYSTEMDUMP bs=4096 of=$P/system.img
+  $BB chmod 4755 $P/system.img
+  ;;  
+recovery)
+  dd if=$RECOVERYDUMP of=$P/recovery.img
+  $BB chmod 4755 $P/recovery.img
+  ;;
+recoveryzip) 
+  $BB nohup $BB sh /res/dumping/zip_recovery.sh > /dev/null 2>&1;
+  echo Done!
+  ;; 
+esac
+
+$BB mount -t rootfs -o remount,ro rootfs;

@@ -1,0 +1,60 @@
+#!/system/bin/sh
+#`. /res/synapse/config.json.generate.battery`
+#`. /res/synapse/config.json.generate.`
+# `. /res/synapse/config.json.generate.dt2w`
+#`. /res/synapse/config.json.generate.uksm`
+
+
+if [ -d "/sys/class/misc/arizona_control" ]; then
+cat << CTAG
+	{
+		sections: [
+			`. /res/synapse/config.json.generate.info`
+			`. /res/synapse/config.json.generate.live`
+			`. /res/synapse/config.json.generate.governor`
+			`. /res/synapse/config.json.generate.little`
+			`. /res/synapse/config.json.generate.big`
+			`. /res/synapse/config.json.generate.multicore`
+			`. /res/synapse/config.json.generate.gpu`
+			`. /res/synapse/config.json.generate.thermal`		
+			`. /res/synapse/config.json.generate.uksm`
+			`. /res/synapse/config.json.generate.led`
+			`. /res/synapse/config.json.generate.audio`
+			`. /res/synapse/config.json.generate.bus`
+			`. /res/synapse/config.json.generate.io`
+			`. /res/synapse/config.json.generate.storage`
+			`. /res/synapse/config.json.generate.powersuspend`
+			`. /res/synapse/config.json.generate.dt2w`
+			`. /res/synapse/json.gen.crontab`
+			`. /res/synapse/config.json.generate.vm`
+			`. /res/synapse/config.json.generate.network`
+			`. /res/synapse/config.json.generate.security`
+			`. /res/synapse/config.json.generate.dumping`
+			`. /res/synapse/config.json.generate.debloat`
+			`. /res/synapse/config.json.generate.logs`
+			`. /res/synapse/config.json.generate.reboot`
+			`. /res/synapse/config.json.generate.profile`
+		]
+	}
+CTAG
+else	
+cat << CTAG
+	{
+		sections: [
+			`. /res/synapse/config.json.generate.info`
+			`. /res/synapse/config.json.generate.live`
+			`. /res/synapse/config.json.generate.governor`
+			`. /res/synapse/config.json.generate.little`
+			`. /res/synapse/config.json.generate.big`
+			`. /res/synapse/config.json.generate.multicore`
+			`. /res/synapse/config.json.generate.io`
+			`. /res/synapse/config.json.generate.storage`
+			`. /res/synapse/config.json.generate.vm`
+			`. /res/synapse/config.json.generate.network`
+			`. /res/synapse/config.json.generate.logs`
+			`. /res/synapse/config.json.generate.reboot`
+			`. /res/synapse/config.json.generate.profile`
+		]
+	}
+CTAG
+fi

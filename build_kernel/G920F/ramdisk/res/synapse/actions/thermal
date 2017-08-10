@@ -1,0 +1,26 @@
+case $1 in
+enabled)
+	P=/sys/module/msm_thermal/parameters/enabled
+	status=`cat $P`
+	if [ -z $2 ]; 
+	then
+		if [ "$status" = "Y" ]; 
+		then
+			echo "1"
+		else
+			echo "0"
+		fi
+	else
+		if [ "$2" = "1" ]; 
+			then
+				echo "Y" > $P
+				echo "1"
+				stop thermald
+			else
+				echo "N" > $P
+				echo "0"
+				start thermald
+		fi
+	fi
+	;;
+esac

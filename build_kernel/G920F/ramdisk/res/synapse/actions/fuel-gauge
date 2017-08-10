@@ -1,0 +1,13 @@
+# By UpInTheAir for SkyHigh kernels
+
+BB=/sbin/busybox;
+P=/sys/class/power_supply/battery/fg_reset_cap;
+$BB chmod 666 $P;
+
+case $1 in
+fuel-gauge)
+  echo 1 > $P
+  echo "The fuel gauge chip is reset. Give it some time to normalize the gauge."
+  sleep 2;
+  ;;
+esac

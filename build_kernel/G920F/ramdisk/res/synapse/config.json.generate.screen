@@ -1,0 +1,79 @@
+#!/system/bin/sh
+
+readColour() {
+P=/sys/class/mdnie/mdnie/controls/
+echo $(printf "#%02X%02X%02X\n" $(cat $P/$1_red) $(cat $P/$1_green) $(cat $P/$1_blue))
+}
+cat << CTAG
+{
+name:Screen,
+elements:[
+{ SPane:{
+title:"mDNIe global controls",
+description:"mobile Digital Natural Image engine control. Samsungs hardware image post-processor controls virtually any image manipulation."
+}},
+{ SCheckBox:{
+description:"",
+label:"UI",
+action:"bit 0 /sys/class/mdnie/mdnie/reg_intercept"
+}},
+{ SCheckBox:{
+description:"",
+label:"Video",
+action:"bit 1 /sys/class/mdnie/mdnie/reg_intercept"
+}},
+{ SCheckBox:{
+description:"",
+label:"Gallery",
+action:"bit 6 /sys/class/mdnie/mdnie/reg_intercept"
+}},
+{ SCheckBox:{
+description:"",
+label:"Browser",
+action:"bit 8 /sys/class/mdnie/mdnie/reg_intercept"
+}},
+{ SCheckBox:{
+description:"",
+label:"Camera",
+action:"bit 4 /sys/class/mdnie/mdnie/reg_intercept"
+}},
+{ SPane:{ title:"Colour channels" }},
+{ SColourPicker:{
+title:"White",
+default:"`echo $(readColour wide_white)`",
+action:"colour wide_white"
+}},
+{ SColourPicker:{
+title:"Red",
+default:"`echo $(readColour wide_red)`",
+action:"colour wide_red"
+}},
+{ SColourPicker:{
+title:"Green",
+default:"`echo $(readColour wide_green)`",
+action:"colour wide_green"
+}},
+{ SColourPicker:{
+title:"Blue",
+default:"`echo $(readColour wide_blue)`",
+action:"colour wide_blue"
+}},
+{ SColourPicker:{
+title:"Yellow",
+default:"`echo $(readColour wide_yellow)`",
+action:"colour wide_yellow"
+}},
+{ SColourPicker:{
+title:"Cyan",
+default:"`echo $(readColour wide_cyan)`",
+action:"colour wide_cyan"
+}},
+{ SColourPicker:{
+title:"Magenta",
+default:"`echo $(readColour wide_magenta)`",
+action:"colour wide_magenta"
+}},
+]
+}
+CTAG
+

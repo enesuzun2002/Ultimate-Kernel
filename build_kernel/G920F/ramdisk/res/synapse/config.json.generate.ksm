@@ -1,0 +1,43 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+	name:KSM,
+	elements:[
+		{ SPane:{
+			title:"Kernel Samepage Merging",
+		}},
+		{ SCheckBox:{
+			label:"Enable",
+			description:"KSM lets the hypervisor system share identical memory pages amongst different processes or virtualized guests. This increases CPU consumption but improves memory.",
+			default:`cat /sys/kernel/mm/ksm/run`,
+			action:"generic /sys/kernel/mm/ksm/run"
+		}},
+		{ SCheckBox:{
+		label:"Deferred Timer",
+		description:"If enabled, KSM thread will not wakeup CPU to carryout activities thus gaining battery while compromising slightly on memory that could have been saved.",
+		default:`cat /sys/kernel/mm/ksm/deferred_timer`,
+		action:"generic /sys/kernel/mm/ksm/deferred_timer"
+		}},
+		{ SSeekBar:{
+			title:"Pages To Scan",
+			unit:" pages",
+			step:4,
+			min:4,
+			max:1024,
+			default:`cat /sys/kernel/mm/ksm/pages_to_scan`,
+			action:"generic /sys/kernel/mm/ksm/pages_to_scan"
+		}},
+		{ SSeekBar:{
+			title:"Scan Delay Interval",
+			unit:" ms",
+			step:50,
+			min:50,
+			max:3000,
+			default:`cat /sys/kernel/mm/ksm/sleep_millisecs`,
+			action:"generic /sys/kernel/mm/ksm/sleep_millisecs"
+		}},
+
+	]
+}
+CTAG

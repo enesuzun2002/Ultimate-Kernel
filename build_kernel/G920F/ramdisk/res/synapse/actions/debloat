@@ -1,0 +1,25 @@
+#
+# UNIVERSAL DEBLOAT
+# <debloat>
+# Copyright (c) 2016 thehacker911 <maikdiebenkorn@gmail.com>
+#
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+
+BB=/system/xbin/busybox;
+
+if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
+	$BB mount -o remount,rw /;
+fi;
+
+case $1 in
+makezip)
+  $BB nohup $BB sh /res/debloat/debloat.sh > /dev/null 2>&1;
+  echo Done!
+  ;; 
+esac
+
+$BB mount -t rootfs -o remount,ro rootfs;

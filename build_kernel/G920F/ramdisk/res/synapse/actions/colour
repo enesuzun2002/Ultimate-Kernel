@@ -1,0 +1,39 @@
+if [[ ! -z $2 ]]; then
+	let "RC=($((16$2)) & 16711680) >> 16";
+	let "GC=($((16$2)) & 65280) >> 8";
+	let "BC=$((16$2)) & 255";
+fi
+
+case $1 in
+
+wide_red)	;&
+wide_green)	;&
+wide_blue)	;&
+wide_yellow)	;&
+wide_cyan)	;&
+wide_magenta)	;&
+wide_white)	;&
+wide_black)
+	P=/sys/class/mdnie/mdnie/controls/
+
+	if [[ ! -z $2 ]]; then
+		echo $RC > $P/$1_red
+		echo $GC > $P/$1_green
+		echo $BC > $P/$1_blue
+	fi
+
+	echo $(printf "#%02X%02X%02X\n" $(cat $P/$1_red) $(cat $P/$1_green) $(cat $P/$1_blue))
+	;;
+led_noti)
+	P=/sys/class/sec/led/led_noti_
+
+	if [[ ! -z $2 ]]; then
+		echo $RC > $Pr
+		echo $GC > $Pg
+		echo $BC > $Pb
+	fi
+
+	echo $(printf "#%02X%02X%02X\n" $(cat $Pr) $(cat $Pg) $(cat $Pb))
+	;;
+
+esac
