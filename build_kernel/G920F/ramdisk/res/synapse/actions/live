@@ -23,7 +23,7 @@ battvoltnow)
   echo Voltage Now: $(($(cat /sys/devices/battery.54/power_supply/battery/voltage_now) /1000)) mV
   ;;
 batttemp)
-  echo Temp: $(($(cat /sys/devices/battery.54/power_supply/battery/batt_temp) / 10)) °C
+  echo Temp: $(($(cat /sys/devices/battery.53/power_supply/battery/batt_temp) / 10)) °C
   ;;
 battcapa)
   echo Capacity: $(($(cat /sys/devices/battery.54/power_supply/battery/capacity) )) %

@@ -49,6 +49,21 @@ cat << CTAG
 		refresh:10000,
 		action:"show battinfo"	
 	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"live batttemp"	
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
+		refresh:2500,
+		action:"live gpu"	
+	}},
+	{ SLiveLabel:{
+		refresh:2500,
+		action:"live gpu_load"	
+	}},
 	]
 }
 CTAG
