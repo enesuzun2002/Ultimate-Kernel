@@ -1,6 +1,10 @@
 #!/system/bin/sh
 
-BB=/system/xbin/busybox;
+if [ ! -f /su/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+else
+	BB=/su/xbin/busybox;
+fi;
 
 config=/res/synapse/config.json
 action=/res/synapse/actions/
@@ -8,8 +12,6 @@ action=/res/synapse/actions/
 if [ "$(mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
 	mount -o rw,remount rootfs;
 fi;
-
-#mount -o rw,remount rootfs;
 
 if [ ! -f $config ]
 then

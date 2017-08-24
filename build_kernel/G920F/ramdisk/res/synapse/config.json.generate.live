@@ -46,6 +46,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SLiveLabel:{
+		title:"Battery",
 		refresh:10000,
 		action:"show battinfo"	
 	}},
@@ -57,6 +58,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SLiveLabel:{
+		title:"GPU",
 		refresh:2500,
 		action:"live gpu"	
 	}},

@@ -16,6 +16,28 @@
 #####################################################################
 BB=busybox;
 
+if [ ! -f /su/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+else
+	BB=/su/xbin/busybox;
+fi;
+
+# KNOX warranty status
+sh /sbin/resetprop.sh > /dev/null;
+
+# Mount rootfs as RW
+
+mount -o rw,remount rootfs;
+
+# Fix permissions
+
+chown system system /sys/devices/system/cpu/cpu4/cpufreq/interactive/param_index
+chmod 0660 /sys/devices/system/cpu/cpu4/cpufreq/interactive/param_index
+
+# Synapse
+
+chmod -R 755 /res/*;
+
 # init.d support
 if [ ! -e /system/etc/init.d ]; then
  if [ "$($BB mount | grep ' /system ' | grep -c 'ro,')" -eq "1" ]; then
