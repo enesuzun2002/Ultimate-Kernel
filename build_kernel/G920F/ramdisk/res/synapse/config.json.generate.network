@@ -4,7 +4,7 @@ BB=/system/xbin/busybox;
 
 cat << CTAG
 {
-    name:NETWORK,
+    name:Network,
     elements:[
 	{ SPane:{
 		title:"TCP Congestion Control",
@@ -18,27 +18,6 @@ cat << CTAG
 		default:$(cat proc/sys/net/ipv4/tcp_congestion_control),
 		action:"generic proc/sys/net/ipv4/tcp_congestion_control",
 		values:[`while read values; do $BB printf "%s, \n" $values; done < proc/sys/net/ipv4/tcp_available_congestion_control`]
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SPane:{
-		title:"WiFi Passwords",
-		description:"Save or restore your WiFi Passwords in /sdcard/hackerkernel/wifi/ folder."
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SButton:{
-		label:"Save WiFi Passwords",
-		action:"network wifi_passwords_save"
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SButton:{
-		label:"Restore WiFi Passwords",
-		action:"network wifi_passwords_restore"
 	}},
 	{ SSpacer:{
 		height:1

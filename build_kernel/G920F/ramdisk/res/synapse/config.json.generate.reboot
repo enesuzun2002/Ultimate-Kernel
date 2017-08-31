@@ -2,7 +2,7 @@
 
 cat << CTAG
 {
-    name:REBOOT,
+    name:Reboot,
     elements:[
 	{ STitleBar:{
 		title:"Reboot Options"

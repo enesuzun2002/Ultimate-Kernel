@@ -2,12 +2,12 @@
 
 cat << CTAG
 {
-    name:CPU Governor,
+    name:"CPU Governor",
     elements:[
     
 	{ SPane:{
 		title:"CPU GOVERNOR A53 cluster0",
-		description:"Selection for A53. If you select INTERACTIVE and INTEREXTREM, only select it for BOTH clusters and NEVER for only one!!! Selecting this Governors for only one cluster will SCREWUP scaling and create CHAOS and other untested PROBLEMS! You have been WARNED. Default is Interactive."
+		description:"If you select INTERACTIVE, only select it for BOTH clusters and NEVER for only one!!! Selecting this governor for only one cluster will SCREW UP scaling and create CHAOS and other untested PROBLEMS! You have been WARNED. Default is Interactive."
 	}},
 	{ SOptionList:{
 		default:`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor`,
@@ -20,7 +20,7 @@ cat << CTAG
 
 		{ SPane:{
 		title:"CPU GOVERNOR A57 cluster1",
-		description:"Selection for A57. If you select INTERACTIVE and INTEREXTREM, only select it for BOTH clusters and NEVER for only one!!! Selecting this Governors for only one cluster will SCREWUP scaling and create CHAOS and other untested PROBLEMS! You have been WARNED. Default is Interactive."
+		description:"If you select INTERACTIVE, only select it for BOTH clusters and NEVER for only one!!! Selecting this governor for only one cluster will SCREW UP scaling and create CHAOS and other untested PROBLEMS! You have been WARNED. Default is Interactive."
 	}},
 	{ SOptionList:{
 		default:`cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor`,
@@ -47,16 +47,8 @@ cat << CTAG
 						}
 					},
 					exclude: [
-						"above_hispeed_delay",
 						"boostpulse",
-						"cpu_util",
-						"enforced_mode",
-						"go_hispeed_load",
-						"hispeed_freq",
-						"mode",
-						"sampling_rate_min",
-						"single_cluster0_min_freq",
-						"target_loads"
+						"sampling_rate_min"
 					]
 				},
 			}
@@ -100,16 +92,8 @@ cat << CTAG
 						}
 					},
 					exclude: [
-						"above_hispeed_delay",
 						"boostpulse",
-						"cpu_util",
-						"enforced_mode",
-						"go_hispeed_load",
-						"hispeed_freq",
-						"mode",
-						"sampling_rate_min",
-						"single_cluster0_min_freq",
-						"target_loads"
+						"sampling_rate_min"
 					]
 				},
 			}

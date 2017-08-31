@@ -2,7 +2,7 @@
 
 cat << CTAG
 {
-    name:LIVE STATISTICS,
+    name:"Live Statistics",
     elements:[
 	{ SPane:{
 		title:"CPU Activity",
@@ -47,12 +47,8 @@ cat << CTAG
 	}},
 	{ SLiveLabel:{
 		title:"Battery",
-		refresh:10000,
+		refresh:2000,
 		action:"show battinfo"	
-	}},
-	{ SLiveLabel:{
-		refresh:10000,
-		action:"live batttemp"	
 	}},
 	{ SSpacer:{
 		height:1

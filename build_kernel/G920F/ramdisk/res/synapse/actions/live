@@ -34,6 +34,9 @@ battstatus)
 batthealth)
   echo Health: `cat /sys/devices/battery.54/power_supply/battery/health`
   ;;
+cputemp)
+  echo Temp: $(($(cat /sys/class/thermal/thermal_zone0/temp) / 1000)) °C
+  ;;
 LiveMemory)
   while read TYPE MEM KB; do
 	if [ "$TYPE" = "MemTotal:" ]; then

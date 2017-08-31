@@ -204,7 +204,7 @@ LiveUnUsed)
 	;;
 
 battinfo)
-	echo Technology: $(cat /sys/class/power_supply/battery/technology)@nHealth: $(cat /sys/class/power_supply/battery/health)@nStatus: $(cat /sys/class/power_supply/battery/status)@nCharge Level: $(cat /sys/class/power_supply/battery/capacity)%
+	echo Technology: $(cat /sys/class/power_supply/battery/technology)@nHealth: $(cat /sys/class/power_supply/battery/health)@nStatus: $(cat /sys/class/power_supply/battery/status)@nCharge level: $(cat /sys/class/power_supply/battery/capacity)%@nTemperature: $(($(cat /sys/devices/battery.53/power_supply/battery/temp) / 10)) °C@nVoltage: $(($(cat /sys/devices/battery.53/power_supply/battery/voltage_now) /1000)) mV@nCharge type: `cat /sys/devices/battery.53/power_supply/battery/charge_type`
 	;;
 
 

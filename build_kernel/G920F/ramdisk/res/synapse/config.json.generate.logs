@@ -3,14 +3,11 @@
 
 cat << CTAG
 {
-    name:"LOGS",
+    name:"Logs",
     elements:[
-	{ SDescription:{
-	description:" "
-	}},
 	{ SPane:{
-		title:"Synapse Data",
-		description:" If you have some issues with Synapse just clear data. This will fix some issues."
+		title:"Synapse data",
+		description:" If you have some issues with Synapse just clear data here."
 	}},
 	{ SDescription:{
 		description:" "

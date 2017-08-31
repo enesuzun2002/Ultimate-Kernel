@@ -30,25 +30,25 @@ cat << CTAG
 		action:"echo "
         }},
         { SLiveLabel:{
-		title:"CD_ROM",
-		description:" CD ROM emulation to mount iso images from device storage to PC.",
+		title:"CD ROM",
+		description:" CD ROM emulation to mount iso images from device storage to PC. Use DriveDroid app from Play Store for best results.",
 		refresh:10000000,
 		action:"echo "
         }},
         { SLiveLabel:{
-		title:"USB_KEYBOARD-MOUSE",
+		title:"USB Keyboard/Mouse",
 		description:" Enable or Disable USB HID Device driver to control PC with keyboard and mouse from phone!",
 		refresh:10000000,
 		action:"echo "
         }},
 	{ SDescription:{
-		description:"1- Connect device to system via USB cable"
+		description:"1. Connect device to system via USB cable"
 	}},
 	{ SDescription:{
-		description:"2- Enable USB_KEYBOARD-MOUSE & [apply] in Synapse"
+		description:"2. Enable USB_KEYBOARD-MOUSE & [apply] in Synapse"
 	}},
 	{ SDescription:{
-		description:"3- Run USB KEYBOARD app <a href='https://play.google.com/store/apps/details?id=remote.hid.keyboard.client&hl=en'>(Download from Google Play)</a> and ensure SU permission."
+		description:"3. Run USB KEYBOARD app <a href='https://play.google.com/store/apps/details?id=remote.hid.keyboard.client&hl=en'>(Download from Google Play)</a> and ensure SU permission."
 	}},
 	{ SSpacer:{
 		height:2

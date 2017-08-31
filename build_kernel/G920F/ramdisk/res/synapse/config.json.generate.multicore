@@ -2,7 +2,7 @@
 
 cat << CTAG
 {
-    name:MULTICORE,
+    name:Multicore,
     elements:[
 	{ SPane:{
 		title:"HMP Thresholds up/down ratios for task migrating",
@@ -47,42 +47,6 @@ cat << CTAG
 		min:1, max:512, unit:"", step:1,
 		default:$(cat /sys/kernel/hmp/down_threshold),
 		action:"hmp /sys/kernel/hmp/down_threshold"
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-        { SPane:{
-                title:"Power Aware Scheduling",
-                description:"Power aware scheduling is a CPU capacity managing 'power scheduler' which lives by the side of the existing process scheduler. Its role is to monitor the system load and decide which CPUs that should be available to the process scheduler. It will basically attempt to “pack” small tasks into the “leftmost” CPU cores (ie. starting cpu0) to keep the other CPU cores as idle as possible, instead of spreading them evenly across all online cores. Theoretically this should increase power efficiency, with a very small cost to performance."
-        }},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SOptionList:{
-		description:"",
-		default:0,
-		action:"generic /sys/kernel/hmp/power_migration",
-		values:{
-			0:"Disabled", 1:"Enabled"
-		}
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-        { SPane:{
-                title:"HMP LITTLE Packing",
-                description:"Allows the HMP Scheduler to pack small tasks into CPUs in the smallest HMP domain. Power savings at a slight cost to performance."
-        }},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SOptionList:{
-		description:"",
-		default:0,
-		action:"generic /sys/kernel/hmp/packing_enable",
-		values:{
-			0:"Disabled", 1:"Enabled"
-		}
 	}},
 	{ SSpacer:{
 		height:1

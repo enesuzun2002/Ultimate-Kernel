@@ -1,6 +1,6 @@
 # Script make by UpInTheAir
 TIMESTAMP=`date +%Y-%m-%d.%H.%M.%S`;
-LOGS=/sdcard/hackerkernel/Logs;
+LOGS=/sdcard/aldeon/logs;
 
 [ ! -d "$LOGS" ] && mkdir -p "$LOGS";
 chmod 755 $LOGS
