@@ -1,4 +1,4 @@
-# Script make by UpInTheAir
+# Script made by UpInTheAir and hardly modified by minealex2244
 case $1 in
 gpu_gov)
   if grep -Fxq "[Current Governor] Interactive" /sys/devices/14ac0000.mali/dvfs_governor
