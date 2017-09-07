@@ -46,6 +46,14 @@ cat << CTAG
 		height:1
 	}},
 	{ SLiveLabel:{
+		title:"CPU temperature",
+		refresh:2000,
+		action:"live cputemp"	
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
 		title:"Battery",
 		refresh:2000,
 		action:"show battinfo"	
@@ -61,6 +69,14 @@ cat << CTAG
 	{ SLiveLabel:{
 		refresh:2500,
 		action:"live gpu_load"	
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
+		title:"Memory",
+		refresh:2000,
+		action:"live LiveMemory"	
 	}},
 	]
 }

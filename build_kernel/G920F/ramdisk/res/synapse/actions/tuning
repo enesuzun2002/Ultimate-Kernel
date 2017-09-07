@@ -1,10 +1,10 @@
 # By UpInTheAir for SkyHigh kernels
 # performance, battery & turbo values by g.lewarne @ XDA
 
-BB=/system/xbin/busybox;
-
-if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
-	$BB mount -o remount,rw /;
+if [ ! -f /su/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+else
+	BB=/su/xbin/busybox;
 fi;
 
 case $1 in
@@ -181,5 +181,3 @@ interactive_L)
   fi
   ;;
 esac
-
-$BB mount -t rootfs -o remount,ro rootfs;

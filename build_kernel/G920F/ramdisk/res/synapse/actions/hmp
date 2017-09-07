@@ -1,9 +1,9 @@
 # By UpInTheAir for SkyHigh kernels
 
-BB=/system/xbin/busybox;
-
-if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
-	$BB mount -o remount,rw /;
+if [ ! -f /su/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+else
+	BB=/su/xbin/busybox;
 fi;
 
 if [ -f "$1" ]; then
@@ -17,5 +17,3 @@ if [ -f "$1" ]; then
 	chmod 0440 /sys/kernel/hmp/up_threshold;
 	chmod 0440 /sys/kernel/hmp/down_threshold;
 fi;
-
-$BB mount -t rootfs -o remount,ro rootfs;

@@ -48,7 +48,11 @@ cat << CTAG
 					},
 					exclude: [
 						"boostpulse",
-						"sampling_rate_min"
+						"sampling_rate_min",
+						"target_loads",
+						"param_index",
+						"cpu_util",
+						"above_hispeed_delay"
 					]
 				},
 			}
@@ -93,7 +97,11 @@ cat << CTAG
 					},
 					exclude: [
 						"boostpulse",
-						"sampling_rate_min"
+						"sampling_rate_min",
+						"target_loads",
+						"param_index",
+						"cpu_util",
+						"above_hispeed_delay"
 					]
 				},
 			}

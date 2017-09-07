@@ -1,9 +1,9 @@
 # By thehacker911 for hacker kernels
 
-BB=/system/xbin/busybox;
-
-if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
-	$BB mount -o remount,rw /;
+if [ ! -f /su/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+else
+	BB=/su/xbin/busybox;
 fi;
 
 case $1 in
@@ -39,5 +39,3 @@ io_tweaking)
   fi
   ;;
 esac
-
-$BB mount -t rootfs -o remount,ro rootfs;

@@ -37,6 +37,12 @@ chmod 0666 /sys/devices/14ac0000.mali/dvfs_governor
 
 chmod -R 755 /res/*;
 
+# Create uci link if not present
+
+if [ ! -e /system/bin/uci ]; then
+     ln -s ../../res/synapse/uci /system/bin/uci
+fi
+
 # init.d support
 if [ ! -e /system/etc/init.d ]; then
  if [ "$($BB mount | grep ' /system ' | grep -c 'ro,')" -eq "1" ]; then

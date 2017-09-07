@@ -1,4 +1,8 @@
-BB=/sbin/busybox;
+if [ ! -f /su/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+else
+	BB=/su/xbin/busybox;
+fi;
 
 if [[ ! -z "$2" ]]; then
 	if [[ "$1" != *".dns"* ]]; then

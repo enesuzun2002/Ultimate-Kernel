@@ -1,10 +1,13 @@
 # By UpInTheAir for SkyHigh kernels
 
-BB=/system/xbin/busybox;
+if [ ! -f /su/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+else
+	BB=/su/xbin/busybox;
+fi;
 
 case $1 in
 usb_mode)
-  $BB mount -t rootfs -o remount,rw rootfs;
   P=/res/synapse/hrtkernel/mass_storage
   if [ ! -z $2 ]; then
   if [ $2 == DEFAULT ]; then
@@ -70,7 +73,6 @@ usb_mode)
     echo DEFAULT
   elif [ $copy == 4 ]; then
     echo DEFAULT
-  $BB mount -t rootfs -o remount,ro rootfs;
   fi
   ;;
 esac

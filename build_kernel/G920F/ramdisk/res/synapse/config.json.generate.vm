@@ -6,7 +6,7 @@ cat << CTAG
     elements:[
 	{ SPane:{
         title:"dirty_background_bytes",
-        description:" Dirty background memory buffer, more you set, more memory will be used for write buffer for background operations, buffer is released on need to free RAM. Default is 5.",
+        description:" Dirty background memory buffer, more you set, more memory will be used for write buffer for background operations, buffer is released on need to free RAM. Default is maximux value.",
 	}},
     { SSeekBar:{
         min:2,
@@ -28,7 +28,7 @@ cat << CTAG
 	}},
 	{ SPane:{
         title:"dirty_bytes",
-        description:"The amount of dirty memory at which writeback will be started Default is the maximum value.",
+        description:"The amount of dirty memory at which writeback will be started. Default is the maximum value.",
 	}},
 	{ SSeekBar:{
         min:2,
