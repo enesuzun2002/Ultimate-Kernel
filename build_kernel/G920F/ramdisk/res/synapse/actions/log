@@ -2,6 +2,10 @@
 TIMESTAMP=`date +%Y-%m-%d.%H.%M.%S`;
 LOGS=/sdcard/aldeon/logs;
 
+if [ "$($BB mount | grep system | grep -c ro)" -eq "1" ]; then
+	$BB mount -o remount,rw /system;
+fi;
+
 [ ! -d "$LOGS" ] && mkdir -p "$LOGS";
 chmod 755 $LOGS
 
@@ -32,3 +36,4 @@ case $1 in
 		echo "Logfile saved to $saved";
 	;;
 esac;
+$BB mount -o remount,ro /system;

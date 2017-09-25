@@ -15,6 +15,7 @@ cat << CTAG
 			`. /res/synapse/config.json.generate.vm`
 			`. /res/synapse/config.json.generate.ksm`
 			`. /res/synapse/config.json.generate.network`
+			`. /res/synapse/config.json.generate.doze`
 			`. /res/synapse/config.json.generate.logs`
 			`. /res/synapse/config.json.generate.about`
 			`. /res/synapse/config.json.generate.reboot`

@@ -16,7 +16,7 @@ cat << CTAG
 	{ SSeekBar:{
        		title:"CPU max frequency",
 		description:"Set the maximum freqency the CPU scales up to.",
-		default:`cat /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq`,
+		default:2100000,
 		action:"generic /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq",
 		values:{
 `
@@ -57,6 +57,16 @@ cat << CTAG
 				to:"/sys/devices/system/cpu/cpu4/cpufreq"
 			}
 		]
+	}},
+	{ SPane:{
+		title:"HPM Voltage Control",
+        }},
+	{ SSeekBar:{
+		title:"Atlas HPM voltage margin",
+		description:"Set the maximum voltage margin the APM undervolts down to.",
+		default:`cat /sys/kernel/debug/mailbox/atl_cl_margin`,
+		action:"generic /sys/kernel/debug/mailbox/atl_cl_margin",
+		unit:"µV", weight:6250.0, min:0, step:1, max:10
 	}},
 	{ SPane:{
 		title:"CPU voltage control",

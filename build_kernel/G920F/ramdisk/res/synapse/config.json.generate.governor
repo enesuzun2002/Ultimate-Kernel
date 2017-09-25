@@ -52,6 +52,7 @@ cat << CTAG
 						"target_loads",
 						"param_index",
 						"cpu_util",
+						"mode",
 						"above_hispeed_delay"
 					]
 				},
@@ -101,6 +102,7 @@ cat << CTAG
 						"target_loads",
 						"param_index",
 						"cpu_util",
+						"mode",
 						"above_hispeed_delay"
 					]
 				},

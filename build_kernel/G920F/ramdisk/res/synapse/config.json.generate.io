@@ -46,7 +46,46 @@ cat << CTAG
 		},
 		exclude: [ "weights" ]
 	}},
-	
+		{ SPane:{
+		title:"General I/O Tunables",
+		description:"Set the internal storage general tunables"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"Enable Add Random",
+		description:"Draw entropy from spinning (rotational) storage.\n",
+		default:0,
+		action:"ioset queue add_random",
+		values:{
+			0:"Disabled", 1:"Enabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"Enable I/O Stats",
+		description:"Maintain I/O statistics for this storage device. Disabling will break I/O monitoring apps but reduce CPU overhead.\n",
+		default:0,
+		action:"ioset queue iostats",
+		values:{
+			0:"Disabled", 1:"Enabled"
+		}
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"Enable Rotational",
+		description:"Treat device as rotational storage.\n",
+		default:0,
+		action:"ioset queue rotational",
+		values:{
+			0:"Disabled", 1:"Enabled"
+		}
+	}},
     ]
 }
 CTAG

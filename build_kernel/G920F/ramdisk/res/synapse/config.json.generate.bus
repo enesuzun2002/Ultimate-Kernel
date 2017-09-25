@@ -4,6 +4,16 @@ cat << CTAG
 {
     name:"Memory Bus",
     elements:[
+	{ SPane:{
+		title:"HPM Voltage Control",
+        }},
+	{ SSeekBar:{
+		title:"Memory Bus HPM voltage margin",
+		description:"Set the maximum voltage margin the APM undervolts down to.",
+		default:`cat /sys/kernel/debug/mailbox/mif_cl_margin`,
+		action:"generic /sys/kernel/debug/mailbox/mif_cl_margin",
+		unit:"µV", weight:6250.0, min:0, step:1, max:10
+	}},
 	{ SPane:{ title:"Memory Bus Voltage control",
 		description:"Voltage supplied to the CCI and memory controllers." }},
 `

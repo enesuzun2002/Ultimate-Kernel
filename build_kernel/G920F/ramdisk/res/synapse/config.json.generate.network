@@ -147,7 +147,7 @@ cat << CTAG
 	}},
 	{ SOptionList:{
 		title:"IPv6 optimistic_dad",
-		description:"Perform Optimistic Duplicate Address Detection. Default is Enabled.\n",
+		description:"Perform Optimistic Duplicate Address Detection. Default is Disabled.\n",
 		default:1,
 		action:"generic /proc/sys/net/ipv6/conf/all/optimistic_dad",
 		values:{
@@ -159,7 +159,7 @@ cat << CTAG
 	}},
 	{ SOptionList:{
 		title:"IPv6 use_optimistic",
-		description:"Default is Enabled.\n",
+		description:"Default is Disabled.\n",
 		default:1,
 		action:"generic /proc/sys/net/ipv6/conf/all/use_optimistic",
 		values:{

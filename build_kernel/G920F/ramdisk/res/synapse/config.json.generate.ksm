@@ -31,6 +31,11 @@ cat << CTAG
 			default:`cat /sys/kernel/mm/ksm/sleep_millisecs`,
 			action:"generic /sys/kernel/mm/ksm/sleep_millisecs"
 		}},
+		{ SLiveLabel:{
+			title:"Live KSM stats",
+			refresh:1000,
+			action:"live KSMStats"	
+		}},
 
 	]
 }

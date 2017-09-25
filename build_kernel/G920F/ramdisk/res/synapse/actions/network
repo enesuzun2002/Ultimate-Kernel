@@ -6,6 +6,10 @@ else
 	BB=/su/xbin/busybox;
 fi;
 
+if [ "$($BB mount | grep system | grep -c ro)" -eq "1" ]; then
+	$BB mount -o remount,rw /system;
+fi;
+
 case $1 in
 tcp_security)
   P=/res/synapse/hrtkernel/tcp_security
@@ -285,3 +289,4 @@ IPv6)
   fi
   ;;
 esac
+$BB mount -o remount,ro /system;
