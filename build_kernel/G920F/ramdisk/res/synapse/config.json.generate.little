@@ -10,9 +10,9 @@ cat << CTAG
 	}},        
 	{ SLiveLabel:{
                   title:"CPU frequency",
-                  description:"Current frequency.",
+                  description:"Current frequencies.",
                   refresh:500,
-                  action:"FREQ=\$(cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq); L=\"\${FREQ%???}MHz\"; echo \$L;"
+                  action:"live LiveCPUFrequency_LITTLE"
         }},
 	{ SSeekBar:{
        		title:"CPU max frequency",
@@ -22,7 +22,7 @@ cat << CTAG
 		values:{
 `
 			for FREQ in $(cat /sys/devices/system/cpu/cpufreq/mp-cpufreq/cluster0_freq_table); do
-				LABEL=$(expr $FREQ / 1000)
+				LABEL=$(($FREQ / 1000))
 				echo "$FREQ:\"${LABEL}MHz\", "
 			done
 `
@@ -36,7 +36,7 @@ cat << CTAG
 		values:{
 `
 			for FREQ in $(cat /sys/devices/system/cpu/cpufreq/mp-cpufreq/cluster0_freq_table); do
-				LABEL=$(expr $FREQ / 1000)
+				LABEL=$(($FREQ / 1000))
 				echo "$FREQ:\"${LABEL}MHz\", "
 			done
 `
