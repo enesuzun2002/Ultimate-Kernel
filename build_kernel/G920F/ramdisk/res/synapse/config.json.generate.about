@@ -26,7 +26,7 @@ cat << CTAG
 	}},
 	{ SPane:{
 		title:"Source",
-		description:"<br><div style='text-align:center;'><a href='https://github.com/minealex2244/Aldeon-Kernel'>GitHub</a></div>"
+		description:"<br><div style='text-align:center;'><a href='https://github.com/enesuzun2002/Ultimate-Kernel'>GitHub</a></div>"
 	}},
 	{ SDescription:{
 		description:""

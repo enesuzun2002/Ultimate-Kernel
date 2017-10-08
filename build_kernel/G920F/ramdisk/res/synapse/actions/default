@@ -117,16 +117,16 @@ hotplug)
   echo `cat $P`
   ;;
 dev)
-  echo "minealex2244"
+  echo "enesuzun2002"
   ;;
 codename)
-  echo "Aldeon"
+  echo "Ultimate"
   ;;    
 version)
   echo `busybox uname -r`
   ;;
 kernel_version)
-  echo "3.2"
+  echo "0.5"
   ;;
 android_version)
   echo `getprop ro.build.version.release`
