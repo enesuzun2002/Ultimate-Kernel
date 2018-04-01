@@ -31,7 +31,6 @@ echo "${bldcya}***** Clean up Environment before compile *****${txtrst}";
 # Make clean source
 read -t 5 -p "Make clean source, 5sec timeout (y/n)?";
 if [ "$REPLY" == "y" ]; then
-./build_clean.sh;
 make distclean;
 make mrproper;
 fi;

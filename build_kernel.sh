@@ -174,10 +174,10 @@ else
 	AUDIO=""
 fi
 
-zip -r Ultimate-Kernel-$TARGET-$AUDIO-7.0-Beta.zip .
-tar -H ustar -c ${KERNELDIR}/output/$TARGET/enes/boot.img > Ultimate-Kernel-$TARGET-$AUDIO-7.0-Beta.tar
-md5sum -t Ultimate-Kernel-$TARGET-$AUDIO-7.0-Beta.tar >> Ultimate-Kernel-$TARGET-$AUDIO-7.0-Beta.tar
-mv Ultimate-Kernel-$TARGET-$AUDIO-7.0-Beta.tar Ultimate-Kernel-$TARGET-$AUDIO-7.0-Beta.tar.md5
+zip -r Ultimate-Kernel-$TARGET-7.0-Beta.zip .
+tar -H ustar -c ${KERNELDIR}/output/$TARGET/enes/boot.img > Ultimate-Kernel-$TARGET-7.0-Beta.tar
+md5sum -t Ultimate-Kernel-$TARGET-7.0-Beta.tar >> Ultimate-Kernel-$TARGET-7.0-Beta.tar
+mv Ultimate-Kernel-$TARGET-7.0-Beta.tar Ultimate-Kernel-$TARGET-7.0-Beta.tar.md5
 
 echo
 echo "Done"
