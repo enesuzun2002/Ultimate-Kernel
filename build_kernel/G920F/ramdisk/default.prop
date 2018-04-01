@@ -9,6 +9,7 @@ security.perf_harden=1
 ro.adb.secure=1
 ro.allow.mock.location=0
 ro.debuggable=0
+ro.oem_unlock_supported=1
 persist.sys.usb.config=mtp
 ro.zygote=zygote64_32
 pm.dexopt.first-boot=interpret-only
@@ -32,6 +33,6 @@ debug.atrace.tags.enableflags=0
 #
 # BOOTIMAGE_BUILD_PROPERTIES
 #
-ro.bootimage.build.date=Mon Nov 27 11:32:41 KST 2017
-ro.bootimage.build.date.utc=1511749961
-ro.bootimage.build.fingerprint=samsung/zerofltexx/zeroflte:7.0/NRD90M/G920FXXS5EQL1:user/test-keys
+ro.bootimage.build.date=Fri May 19 21:59:09 KST 2017
+ro.bootimage.build.date.utc=1495198749
+ro.bootimage.build.fingerprint=samsung/dreamltexx/dreamlte:7.0/NRD90M/G950FXXU1AQEB:user/test-keys
