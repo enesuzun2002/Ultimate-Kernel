@@ -30,8 +30,6 @@ on init
     symlink /dev/block/platform/15570000.ufs/by-name/PERSISTENT /dev/block/persistent
 
 on post-fs-data
-# Log data folder
-    mkdir /data/log 0771 radio system
     mkdir /data/media 0770 media_rw media_rw
 
     setprop vold.post_fs_data_done 1
@@ -157,12 +155,7 @@ on boot
     chmod 0222 /sys/kernel/debug/tracing/trace_marker
     write /sys/kernel/debug/tracing/tracing_on 0
 
-    # SEC_PM sysfs
-    # RTC logging daemon
-    chmod 0770 /system/bin/rtc_log.sh
-    chown system system /system/bin/rtc_log.sh
-
-    # DVFS & Hotplug
+    # PMS DVFS
     chown radio system /sys/power/enable_dm_hotplug
     chmod 0664 /sys/power/enable_dm_hotplug
     chown bluetooth system /sys/power/cluster0_core_hotplug_in
@@ -367,12 +360,6 @@ on boot
     # CPU Idle
     chown system system /sys/module/cpuidle_exynos64/parameters/enable_mask
 
-    # RTC status
-    chown system system /sys/power/rtc_status
-    chmod 0664 /sys/power/rtc_status
-    chown system system /efs/FactoryApp/rtc_status
-    chmod 0664 /efs/FactoryApp/rtc_status
-
 # mobicore
     chmod 0660 /dev/t-base-tui
     chown system system /dev/t-base-tui
@@ -403,15 +390,6 @@ on boot
 
 	# MSP FactoryApp
 	mkdir /efs/FactoryApp 0775 system system
-
-# Support DM logging
-    chmod 0770 /system/bin/dmd
-
-# Support Virtual Com
-    chmod 0770 /system/bin/vcd
-
-# Support AP/CP log dump
-    chmod 0770 /system/bin/sced
 
 
 # permissions for bluetooth.
@@ -754,25 +732,6 @@ service argos-daemon /system/bin/argosd
     user system
     group system radio
 
-# DM daemon
-#    service DM-daemon /system/bin/dmd
-#    class main
-#    user root
-#    group system
-
-# VC daemon
-    service VC-daemon /system/bin/vcd
-    class main
-    user root
-    group system
-    seclabel u:r:vcd:s0
-
-# SCE daemon
-#    service SCE-daemon /system/bin/sced
-#    class main
-#    user root
-#    group system
-
 service prepare_param /system/bin/prepare_param.sh /dev/block/platform/15570000.ufs/by-name/PARAM
     class core
     user root
@@ -874,18 +833,6 @@ on property:ro.securestorage.knox=true
     chown system system /dev/.secure_storage
     restorecon -R /dev/.secure_storage
     start secure_storage
-
-# WSM service startup
-service wsmd /system/bin/wsmd
-    class core
-    user system
-    group system
-    disabled
-on property:ro.wsmd.enable=true
-    mkdir /dev/socket/wsm_socket 
-    chmod 0711 /dev/socket/wsm_socket
-    chown system system /dev/socket/wsm_socket
-    start wsmd
 
 # AIR
 service visiond /system/bin/visiond

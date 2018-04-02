@@ -783,10 +783,6 @@ on post-fs-data
     mkdir  /data/app_fonts 0775 system system
 
 on boot
-
-	# KNOX KAP
-    chown system system /dev/knox_kap
-    chmod 0660 /dev/knox_kap
 	
     # permissions for bluetooth.
     mkdir /efs/bluetooth 0775 radio system
@@ -874,6 +870,8 @@ on boot
     chown system system /sys/class/sec/tsp/holding_time
     chown system system /sys/class/sec/tsp/all_touch_count
     chown system system /sys/class/sec/tsp/z_value
+    chown system system /sys/class/sec/tsp/get_lp_dump
+    chown system system /sys/class/sec/tsp/force_recal_count
  
 
     # Permissions for System Server and daemons.
@@ -1076,8 +1074,16 @@ on boot
    chmod 0660 /sys/class/power_supply/battery/cisd_data
    chown system radio /sys/class/power_supply/battery/cisd_data_json
    chmod 0660 /sys/class/power_supply/battery/cisd_data_json
+   chown system radio /sys/class/power_supply/battery/cisd_data_d_json
+   chmod 0660 /sys/class/power_supply/battery/cisd_data_d_json
    chown system system /efs/FactoryApp/cisd_data
    chmod 0640 /efs/FactoryApp/cisd_data
+   chown system radio /sys/class/power_supply/battery/cisd_wc_data
+   chmod 0660 /sys/class/power_supply/battery/cisd_wc_data
+   chown system radio /sys/class/power_supply/battery/cisd_wc_data_json
+   chmod 0660 /sys/class/power_supply/battery/cisd_wc_data_json
+   chown system system /efs/FactoryApp/cisd_wc_data
+   chmod 0640 /efs/FactoryApp/cisd_wc_data
 
     # OTG Test
     chown system radio /sys/class/host_notify/usb_otg/booster
@@ -1202,6 +1208,9 @@ on boot
 
 # HMT relay mode
     chown radio system /sys/devices/virtual/relay_on
+
+# Daydream
+    setprop sys.daydream.connected 0
 
 # KNOX_NAP
     chmod 0660 /dev/ncm_dev
@@ -1352,6 +1361,13 @@ service SIDESYNC_service /system/bin/ss_conn_daemon
 service edmaudit /system/bin/edmaudit
     class main
     user root
+    disabled
+
+on property:security.edmaudit=true
+    start edmaudit
+
+on property:security.edmaudit=false
+    stop edmaudit
     
 ## WTL_EDM_END
 
@@ -1421,11 +1437,6 @@ on property:ro.debuggable=1
 
 service vaultkeeperd /system/bin/vaultkeeperd
     class core
-
-service ss_kb_service /system/bin/ss_kbservice_daemon
-    class main
-    user system
-    group systemss_kbservice_daemon
 
 service drm /system/bin/drmserver
     class main
