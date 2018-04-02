@@ -118,7 +118,6 @@
 /dev/umts*                0660   system     radio
 /dev/umts_csd             0660   system     loop_radio
 /dev/smd4		  0660	 system	    radio
-/dev/ramdump_memshare     0660   system     radio
 
 # QCOM MIF
 /dev/subsys_esoc*         0660   system     radio

@@ -93,7 +93,7 @@ config.                 u:object_r:config_prop:s0
 ro.config.              u:object_r:config_prop:s0
 dalvik.                 u:object_r:dalvik_prop:s0
 ro.dalvik.              u:object_r:dalvik_prop:s0
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/model/property_contexts"
 ############ aosp and sec_common #############
@@ -120,10 +120,9 @@ qualcomm.perf.                  u:object_r:perf_prop:s0
 # avc:  denied  { set } for property=qualcomm.bluetooth.opp scontext=u:r:init_shell:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
 # avc:  denied  { set } for property=secmm.player.uhqamode scontext=u:r:mediaserver:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
 
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/BSP/qcom_bsp/common/property_contexts"
-# Copyright (c) 2014 - 2016, The Linux Foundation. All rights reserved.
 # Copyright (c) 2015-2016 Dolby Laboratories, Inc. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -173,7 +172,6 @@ ctl.qti                    u:object_r:qti_prop:s0
 ctl.sensors                u:object_r:sensors_prop:s0
 ctl.msm_irqbalance         u:object_r:msm_irqbalance_prop:s0
 ctl.msm_irqbal_lb          u:object_r:msm_irqbalance_prop:s0
-ctl.diag_mdlog_start       u:object_r:diag_mdlog_prop:s0
 camera.                    u:object_r:camera_prop:s0
 # SEC_SEPOLICY N_setup, exclude : dup with SEC persist.camera.            u:object_r:camera_prop:s0
 spcomlib.                    u:object_r:spcomlib_prop:s0
@@ -195,7 +193,6 @@ qemu.hw.mainkeys           u:object_r:qemu_hw_mainkeys_prop:s0
 ro.dbg.coresight.cfg_file     u:object_r:coresight_prop:s0
 ctl.hbtp                   u:object_r:ctl_hbtp_prop:s0
 sys.audio.init             u:object_r:audio_prop:s0
-persist.dpm.feature        u:object_r:persist_dpm_prop:s0
 ro.alarm_boot                 u:object_r:alarm_boot_prop:s0
 debug.sf.nobootanimation   u:object_r:boot_animation_prop:s0
 debug.gralloc.             u:object_r:debug_gralloc_prop:s0
@@ -211,29 +208,18 @@ ro.alarm_handled           u:object_r:alarm_handled_prop:s0
 ro.alarm_instance          u:object_r:alarm_instance_prop:s0
 #HWUI Property
 ro.hwui.texture_cache_size u:object_r:hwui_prop:s0
-#Bservice Property
-ro.sys.fw.bservice_ u:object_r:bservice_prop:s0
-#Delayed Service Restart Property
-ro.am.reschedule_service u:object_r:reschedule_service_prop:s0
 persist.graphics.vulkan.disable     u:object_r:graphics_vulkan_prop:s0
 #boot mode property
 sys.boot_mode              u:object_r:boot_mode_prop:s0
 # GPU
 ro.gpu.available_frequencies u:object_r:freq_prop:s0
 
-# NFC
-sys.nfc.nq.                u:object_r:nfc_nq_prop:s0
-
 # MSM 8952 qcom
 media.msm8956hw            u:object_r:media_msm8956hw_prop:s0
 media.settings.xml         u:object_r:media_settings_xml_prop:s0
 media.msm8956.version      u:object_r:media_msm8956_version_prop:s0
 
-#crash detection property
-sys.crash.detect			u:object_r:detect_prop:s0
-persist.crash.cnt			u:object_r:detect_prop:s0
-
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/BSP/qcom_bsp/msm8996/property_contexts"
 # Copyright (c) 2016, The Linux Foundation. All rights reserved.
@@ -265,7 +251,7 @@ persist.crash.cnt			u:object_r:detect_prop:s0
 
 ctl.qvrd                   u:object_r:ctl_qvrd_prop:s0
 
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/BSP/qcom_common/property_contexts"
 ro.qualcomm.bt.               u:object_r:qcom_bt_prop:s0
@@ -279,7 +265,7 @@ usb_uicc.                  u:object_r:uicc_prop:s0
 # avc:  denied  { set } for property=usb_uicc.loading scontext=u:r:init_shell:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
 # avc:  denied  { set } for property=config.zram scontext=u:r:init_shell:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
 
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/BSP/marvell_common/property_contexts"
 #
@@ -297,14 +283,14 @@ mdc_initial_max_retry       u:object_r:radio_prop:s0
 # avc:  denied  { set } for property=marvell.ril.ppp.enabled scontext=u:r:marvelltel:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
 # avc:  denied  { set } for property=mdc_initial_max_retry scontext=u:r:marvelltel:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
 
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/BSP/sprd_common/property_contexts"
 media.                          u:object_r:media_prop:s0
 monitor.	u:object_r:monitor_prop:s0
 slog.	u:object_r:slog_prop:s0
 
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/property_contexts"
 #
@@ -322,13 +308,6 @@ ctl.redsocks             u:object_r:ctl_redsocks_prop:s0
 ctl.sdumpstate           u:object_r:ctl_dumpstate_prop:s0
 ctl.ikev2-client         u:object_r:ctl_ikev2_client_prop:s0
 ctl.preparefbe              u:object_r:ctl_preparefbe_prop:s0
-# seandroid/board/notice/view/21117182
-# avc:  denied  { set } for property=ctl.BCS-daemon pid=3534 uid=1000 gid=1000 scontext=u:r:smdexe:s0 tcontext=u:object_r:ctl_default_prop:s0 tclass=property_service
-ctl.BCS-daemon			 u:object_r:ctl_bcs_daemon_prop:s0
-# avc:  denied  { set } for property=ctl.apexserver pid=11286 uid=1013 gid=1005 scontext=u:r:mediaserver:s0 tcontext=u:object_r:ctl_default_prop:s0 tclass=property_service permissive=1
-# # board/N_review_request/view/21944881
-ctl.apexserver			 u:object_r:ctl_apexserver_prop:s0
-
 dev.MDPLimitCondition		u:object_r:system_prop:s0
 dev.kies.		u:object_r:kies_prop:s0
 dev.kiessupport		u:object_r:kies_prop:s0
@@ -415,9 +394,6 @@ zygote.aslr.agent.enabled           u:object_r:aslr_prop:s0
 zygote.aslr.agent64                 u:object_r:aslr_prop:s0
 zygote.aslr.agent32                 u:object_r:aslr_prop:s0
 
-# App Permission Monitor
-persist.app.permission.monitor      u:object_r:apm_prop:s0
-
 
 ############ knox_common #############
 audit.ondenial u:object_r:denial_prop:s0
@@ -453,15 +429,15 @@ runtime.firstboot             u:object_r:system_prop:s0
 # avc:  denied  { set } for property=persist.translation.assistant scontext=u:r:system_app:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
 # avc:  denied  { set } for property=min_freq_0 scontext=u:r:init_shell:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
 # avc:  denied  { set } for property=vidc.debug.turbo scontext=u:r:mediaserver:s0 tcontext=u:object_r:default_prop:s0 tclass=property_service
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/carrier/carrier_spr/property_contexts"
 cdma.home.	u:object_r:radio_prop:s0
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/carrier/carrier_tfntmo/property_contexts"
 #cdma.home.	u:object_r:radio_prop:s0
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 
 #line 1 "vendor/samsung/system/sepolicy/carrier/carrier_kor/property_contexts"
 #
@@ -474,5 +450,5 @@ media.sktdrm.                                    u:object_r:sktdrm_prop:s0
 
 ############ LGT #############
 ctl.mwlan_vpncored                               u:object_r:ctl_mwlan_vpncored_prop:s0
-#line 1 "out/target/product/dream2lte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
+#line 1 "out/target/product/zeroflte/obj/ETC/sectxfile_nl_intermediates/sectxfile_nl"
 

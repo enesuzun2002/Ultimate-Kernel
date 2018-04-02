@@ -149,7 +149,7 @@ on boot
     # Allow to access debugfs
     chmod 755 /sys/kernel/debug
 
-    setprop ro.radio.noril no
+    #setprop ro.radio.noril yes
 
     # Set up kernel tracing, but disable it by default
     chmod 0222 /sys/kernel/debug/tracing/trace_marker
@@ -390,7 +390,6 @@ on boot
 
 	# MSP FactoryApp
 	mkdir /efs/FactoryApp 0775 system system
-
 
 # permissions for bluetooth.
     setprop ro.bt.bdaddr_path "/efs/bluetooth/bt_addr"
@@ -751,18 +750,6 @@ service fingerprintd /system/bin/fingerprintd
     user system
     group system
 
-# faced
-service faced /system/bin/faced
-    class late_start
-    user system
-    group system
-
-# Sensorhub service
-service sensorhubservice /system/bin/sensorhubservice
-    class main
-    user system
-    group input
-
 # Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
 service watchdogd /sbin/watchdogd 10 20
     class core
@@ -833,12 +820,6 @@ on property:ro.securestorage.knox=true
     chown system system /dev/.secure_storage
     restorecon -R /dev/.secure_storage
     start secure_storage
-
-# AIR
-service visiond /system/bin/visiond
-    class main
-    user system
-    group system camera media media_rw
 
 # umount service
 service umount_service /system/bin/umount -D /preload
