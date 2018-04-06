@@ -80,24 +80,13 @@
 #endif
 
 #ifdef CONFIG_SOC_EXYNOS7420
-	#ifdef EXYNOS7420_CPU_UNDERCLOCK
-		#define CL0_MIN_FREQ		200000
-		#define CL1_MIN_FREQ		200000
-	#else
-		#define CL0_MIN_FREQ		400000
-		#define CL1_MIN_FREQ		800000
-	#endif
-	#ifdef EXYNOS7420_CPU_OVERCLOCK
-		#define CL0_MAX_FREQ		1600000
-		#define CL1_MAX_FREQ		2500000
-	#else
-		#define CL0_MAX_FREQ		1500000
-		#define CL1_MAX_FREQ		2100000
-	#endif
+#define CL0_MIN_FREQ		200000
+#define CL0_MAX_FREQ		1500000
+#define CL1_MIN_FREQ		400000
+#define CL1_MAX_FREQ		2100000
 #else
 #error "Please define core frequency ranges for current SoC."
 #endif
-
 #define VOLT_RANGE_STEP		25000
 #define CLUSTER_ID(cl)		(cl ? ID_CL1 : ID_CL0)
 
