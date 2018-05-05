@@ -852,7 +852,7 @@
 	ipa_pdata {
 		compatible = "samsung,exynos-ipa";
 
-		control_temp = <45>;
+		control_temp = <90>;
 		temp_threshold = <10>;
 		enabled = <1>;
 		tdp = <3500>;
@@ -2151,8 +2151,8 @@
 
 			/* Time table */
 			input_booster,head_times = <130 130 0>;
-			input_booster,tail_times = <0 0 500>;
-			input_booster,phase_times = <0 0 0>;
+			input_booster,tail_times = <500 500 0>;
+            input_booster,phase_times = <0 0 0>;
 		};
 		booster_key@4 { // Input Booster +
 			input_booster,label = "MULTITOUCH";
@@ -2169,9 +2169,9 @@
 			input_booster,int_freqs = <0 0>;
 
 			/* Time table */
-			input_booster,head_times = <1000 0>;
-			input_booster,tail_times = <0 500>;
-			input_booster,phase_times = <0 0>;
+			input_booster,head_times = <1000 1000>;
+			input_booster,tail_times = <500 500>;
+            input_booster,phase_times = <0 0>;
 		};
 		booster_key@5 {
 			input_booster,label = "KEYBOARD";
@@ -2190,7 +2190,7 @@
 			/* Time table */
 			input_booster,head_times = <130 130>;
 			input_booster,tail_times = <0 0>;
-			input_booster,phase_times = <0 0>;
+input_booster,phase_times = <0 0>;
 		};
 		booster_key@6 {
 			input_booster,label = "MOUSE";
@@ -2207,9 +2207,9 @@
 			input_booster,int_freqs = <0 0>;
 
 			/* Time table */
-			input_booster,head_times = <130 0>;
-			input_booster,tail_times = <0 500>;
-			input_booster,phase_times = <0 0>;
+			input_booster,head_times = <130 130>;
+			input_booster,tail_times = <500 500>;
+            input_booster,phase_times = <0 0>;
 		};
 		booster_key@7 {
 			input_booster,label = "MOUSE WHEEL";
@@ -2228,7 +2228,7 @@
 			/* Time table */
 			input_booster,head_times = <130 0>;
 			input_booster,tail_times = <0 0>;
-			input_booster,phase_times = <0 0>;
+            input_booster,phase_times = <0 0>;
 		};
 		booster_key@8 {
 			input_booster,label = "PEN HOVER";
@@ -2245,9 +2245,9 @@
 			input_booster,int_freqs = <0 0>;
 
 			/* Time table */
-			input_booster,head_times = <130 0>;
-			input_booster,tail_times = <0 500>;
-			input_booster,phase_times = <0 0>;
+			input_booster,head_times = <130 130>;
+			input_booster,tail_times = <500 500>;
+            input_booster,phase_times = <0 0>;
 		}; // Input Booster -
 		/* If you need to add new key type, add it this position */
 	};
