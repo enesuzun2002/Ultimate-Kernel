@@ -14,33 +14,6 @@
 # limitations under the License.
 
 #####################################################################
-BB=busybox;
-
-if [ ! -f /su/xbin/busybox ]; then
-	BB=/system/xbin/busybox;
-else
-	BB=/su/xbin/busybox;
-fi;
-
-# Mount rootfs as RW
-
-mount -o rw,remount rootfs;
-
-# Fix permissions
-
-chmod 0666 /sys/devices/14ac0000.mali/dvfs_governor
-chmod 0666 /sys/module/workqueue/parameters/power_efficient
-
-# Synapse
-
-chmod -R 755 /res/*;
-
-# Create uci link if not present
-
-if [ ! -e /system/bin/uci ]; then
-     ln -s ../../res/synapse/uci /system/bin/uci
-fi
-
 # init.d support
 if [ ! -e /system/etc/init.d ]; then
  if [ "$($BB mount | grep ' /system ' | grep -c 'ro,')" -eq "1" ]; then
