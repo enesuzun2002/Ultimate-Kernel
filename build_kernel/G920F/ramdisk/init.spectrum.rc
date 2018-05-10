@@ -30,6 +30,14 @@ on property:persist.spectrum.profile=0
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 75
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2100000
 
 # Performance
 on property:persist.spectrum.profile=1
@@ -51,6 +59,14 @@ on property:persist.spectrum.profile=1
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 35000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/enforced_mode 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2100000
 
 # Battery
 on property:persist.spectrum.profile=2
@@ -70,6 +86,18 @@ on property:persist.spectrum.profile=2
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 90
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 15000
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 15000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 200000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 200000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 200000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 200000
     write /sys/block/sda/queue/scheduler noop
 
 # Gaming
