@@ -69,6 +69,11 @@ if [ "$TARGET" = "G920F" ] ; then
 	export KERNEL_CONFIG="ultimate_defconfig";
 fi;
 
+# G920F
+if [ "$TARGET" = "G925F" ] ; then
+	export KERNEL_CONFIG="ultimate_edge_defconfig";
+fi;
+
 # build script
 export USER=`whoami`;
 export TMPFILE=`mktemp -t`;

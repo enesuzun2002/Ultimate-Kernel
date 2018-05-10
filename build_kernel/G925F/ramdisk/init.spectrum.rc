@@ -1,0 +1,143 @@
+# SPECTRUM KERNEL MANAGER
+# Ramdisk file for profile based kernel management
+# Implimentation inspired by Franco's fku profiles
+
+# Initialization
+on property:sys.boot_completed=1
+   # Set default profile on first boot
+   exec u:r:init:s0 root root -- /init.spectrum.sh
+   exec u:r:su:s0 root root -- /init.spectrum.sh
+   # Enable Spectrum support
+   setprop spectrum.support 1
+   # Add kernel name
+   setprop persist.spectrum.kernel Ultimate
+
+# Balance (default profile)
+on property:persist.spectrum.profile=0
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 59000 1300000:39000 1700000:19000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration 40000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 89
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 65 1500000:75
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 40000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 19000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration 40000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 85
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 75
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 400000
+
+# Performance
+on property:persist.spectrum.profile=1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 25000 1300000:20000 1700000:20000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration 45000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 83
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 60 1500000:70
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 35000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 15000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/enforced_mode 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 12000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration 45000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 80
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 70
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 35000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/enforced_mode 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 400000
+
+# Battery
+on property:persist.spectrum.profile=2
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 70000 1300000:55000 1700000:55000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration 25000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 95
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 80 1500000:90
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 15000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 15000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 37000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration 25000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 80
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 90
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 15000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 15000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1500000
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2100000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 200000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 200000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 200000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 200000
+    write /sys/block/sda/queue/scheduler noop
+
+# Gaming
+on property:persist.spectrum.profile=3
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/boostpulse_duration 45000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 90
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 74 768000:73 864000:64 960000:80 1248000:61 1344000:69 1440000:64 1536000:74 1632000:69 1689600:67 1824000:72
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 35000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/enforced_mode 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/boostpulse_duration 45000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 80
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 80 384000:33 460800:25 600000:50 672000:65 787200:70 864000:85 960000:90 1248000:92
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 50000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 40000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/enforced_mode 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1700000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1700000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1700000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1700000
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2300000
+    write /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq 2300000
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 2300000
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2300000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 400000
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq 400000
+    write /sys/devices/platform/gpusysfs/gpu_max_clock 772
