@@ -414,7 +414,7 @@ on boot
     chmod 6755 /system/bin/dmm_v2
 
 # SSWAP
-    write /proc/sys/vm/swappiness 200
+    write /proc/sys/vm/swappiness 190
 
 #MST HW Support
     setprop ro.mst.support 1
