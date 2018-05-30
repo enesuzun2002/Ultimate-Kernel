@@ -69,9 +69,19 @@ if [ "$TARGET" = "G920F" ] ; then
 	export KERNEL_CONFIG="ultimate_defconfig";
 fi;
 
-# G920F
+# G925F
 if [ "$TARGET" = "G925F" ] ; then
 	export KERNEL_CONFIG="ultimate_edge_defconfig";
+fi;
+
+# G920F_Kali
+if [ "$TARGET" = "G920Fk" ] ; then
+        export KERNEL_CONFIG="kali_defconfig";
+fi;
+
+# G925F_Kali
+if [ "$TARGET" = "G925Fk" ] ; then
+        export KERNEL_CONFIG="kali_edge_defconfig";
 fi;
 
 # build script
