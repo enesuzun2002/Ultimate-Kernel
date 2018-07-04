@@ -87,7 +87,7 @@ vread)
   ;;
 vwrite)
   P=/sys/devices/system/cpu/cpu0/cpufreq/UV_mV_table
-  readvolt=$(/res/synapse/hrtkernel/actions/default vread)
+  readvolt=$(/res/synapse/actions/default vread)
   default=`echo $readvolt | awk '{$NF *= -1; print}'`
   if [ ! -z $2 ]
   then
@@ -95,7 +95,7 @@ vwrite)
   while read freq volt; do val="$val $(($default + $2 + ${volt//[ mV]/}))"; done < $P
   echo $val > $P
   fi
-  echo $(/res/synapse/hrtkernel/actions/default vread)
+  echo $(/res/synapse/actions/default vread)
   ;;
 hotplug)
   P=/sys/module/intelli_plug/parameters/intelli_plug_active

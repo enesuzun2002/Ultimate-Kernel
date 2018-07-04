@@ -48,7 +48,7 @@ cat << CTAG
 	{ SOptionList:{
 		title:"Profile",
 		description:" Select your profile for CPU Interactive governor.\n",
-		default:`echo $(/res/synapse/actions/tuning interactive_L)`,
+		default:`echo $(/res/synapse/hrtkernel/tuning interactive_L)`,
 		action:"tuning interactive_L",
 		values:[Default, Performance, Battery,],
 		notify:[

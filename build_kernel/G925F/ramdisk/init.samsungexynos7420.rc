@@ -6,7 +6,6 @@ import init.fac.rc
 import init.zerolte_fac.rc
 import init.gps.rc
 import init.spectrum.rc
-import init.synapse.rc
 
 on early-init
     mount debugfs /sys/kernel/debug /sys/kernel/debug
