@@ -75,7 +75,7 @@ echo " Done!"
 #
 echo -n "[*] Rebuilding UCI configuration..."
 
-/system/bin/uci >> /dev/.synapse-update.log 2>&1
+/sbin/uci >> /dev/.synapse-update.log 2>&1
 rc=$?
 
 if [ $rc != 0 ]; then
