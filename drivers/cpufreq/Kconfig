@@ -223,6 +223,14 @@ config CPU_FREQ_DEFAULT_GOV_ALUCARD
   	select CPU_FREQ_GOV_ALUCARD
   	help
 
+config CPU_FREQ_DEFAULT_GOV_SCHED
+	bool "sched"
+	select CPU_FREQ_GOV_SCHED
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the CPUfreq governor 'sched' as default. This scales
+	  cpu frequency from the scheduler as per-entity load tracking
+	  statistics are updated.
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -488,6 +496,23 @@ config EXYNOS7420_CPU_OVERCLOCK
 	depends on ARM_EXYNOS7420_CPUFREQ
 	help
 	   Sets Apollo and Atlas clusters to max cpu frequenz
+
+config CPU_FREQ_GOV_SCHED
+	tristate "'sched' cpufreq governor"
+	depends on CPU_FREQ
+	select CPU_FREQ_GOV_COMMON
+	help
+	  'sched' - this governor scales cpu frequency from the
+	  scheduler as a function of cpu capacity utilization. It does
+	  not evaluate utilization on a periodic basis (as ondemand
+	  does) but instead is invoked from the completely fair
+	  scheduler when updating per-entity load tracking statistics.
+	  Latency to respond to changes in load is improved over polling
+	  governors due to its event-driven design.
+
+	  If in doubt, say N.
+
+endif
 
 menu "x86 CPU frequency scaling drivers"
 depends on X86
