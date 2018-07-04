@@ -47,12 +47,53 @@ static DEFINE_MUTEX(cpufreq_governor_nexus_mutex);
 
 #define TASK_NAME_LEN 15
 
+/*
+ * count of history items used to stabilization future
+ * system workload.
+ *
+ * defaults to ~66 items (history for one second
+ * when using default timer rate of 15ms)
+ */
+#define LOAD_STABILIZATION_HISTORY_SIZE (1000 / 15)
+
+/*
+ * Scales the given load and index to give us a
+ * prioritized load history 
+ */
+#define LOAD_STABILIZATION_SCALE(index, load) ((LOAD_STABILIZATION_HISTORY_SIZE - index) * load)
+
+#define GAUSS_SUM(max) \
+	((max * (max + 1)) / 2)
+
 struct cpufreq_nexus_cpuinfo {
 	int init;
 
 	int cpu;
 	struct cpufreq_policy *policy;
 	struct cpufreq_frequency_table *freq_table;
+
+	// ktime when current boostpulse ends
+	u64 boostpulse_end;
+
+	/*
+	 * List of previously tracked system workloads
+	 *
+	 * Following table shows the layout of the history data table
+	 *   - First line display the index in the histroy
+	 *   - Second line display the actual timestamp of the load entry
+	 *
+	 * size equals to LOAD_STABILIZATION_HISTORY_SIZE
+	 * rate equals to the current timer_rate-setting
+	 *
+	 * The load stabilization may get slightly more inaccurate when the timer_rate
+	 * setting get altered as it uses inaccurate timespans to calculate the workload
+	 *
+	 * |----------------|----------------|-----|-------------------|
+	 * | 0              | 1              | ... | size - 1          |
+	 * | now - 1 * rate | now - 2 * rate | ... | now - size * rate |
+	 * |----------------|----------------|-----|-------------------|
+	 */
+	int *load_stabilization_history;
 
 	cputime64_t prev_idle;
 	cputime64_t prev_wall;
@@ -66,9 +107,13 @@ struct cpufreq_nexus_cpuinfo {
 	struct task_struct *work;
 
 	struct mutex timer_mutex;
+	struct mutex load_stabilization_mutex;
 };
 
 struct cpufreq_nexus_tunables {
+	// up-do-date backlink to the parent cpuinfo
+	struct cpufreq_nexus_cpuinfo *cpuinfo;
+
 	// load at which the cpugov decides to scale down
 	#define DEFAULT_DOWN_LOAD 40
 	unsigned int down_load;
@@ -147,25 +192,16 @@ struct cpufreq_nexus_tunables {
 
 	// minimal frequency chosen by the cpugov
 	unsigned int freq_min;
-	int freq_min_do_revalidate;
 
 	// maximal frequency chosen by the cpugov
 	unsigned int freq_max;
-	int freq_max_do_revalidate;
 
 	// frequency used when governor is in boost-mode
 	unsigned int boost_freq;
-	int boost_freq_do_revalidate;
 
 	// simple boost to freq_max
 	#define DEFAULT_BOOST 0
 	int boost;
-
-	// time in usecs when current boostpulse ends
-	u64 boostpulse;
-
-	// ktime when current boostpulse ends
-	u64 boostpulse_end;
 
 	// time in usecs when current boostpulse ends
 	#define DEFAULT_BOOSTPULSE_DURATION 50000
@@ -185,7 +221,6 @@ struct cpufreq_nexus_tunables {
 
 	// hispeed-frequency which can only be exceeded after persting hispeed-load
 	unsigned int hispeed_freq;
-	int hispeed_freq_do_revalidate;
 
 	// load which is used to determine if cpugov should exceed hispeed-frequency
 	#define DEFAULT_HISPEED_LOAD 100
@@ -198,6 +233,14 @@ struct cpufreq_nexus_tunables {
 	// indicates if hispeed-revalidation should work as power-efficient as possible
 	#define DEFAULT_HISPEED_POWER_EFFICIENT 0
 	unsigned int hispeed_power_efficient;
+
+	// whether to enable load-stabilization
+	#define DEFAULT_LOAD_STABILIZATION 0
+	int load_stabilization;
+
+	// threshold-load above which the cpugov ignores load stabiliaztion for this run
+	#define DEFAULT_LOAD_STABILIZATION_THRESHOLD 50
+	int load_stabilization_threshold;
 };
 
 static DEFINE_PER_CPU(struct cpufreq_nexus_cpuinfo, gov_cpuinfo);
@@ -219,6 +262,34 @@ static unsigned int choose_frequency(struct cpufreq_nexus_cpuinfo *cpuinfo, int 
 	}
 
 	return cpuinfo->freq_table[*index].frequency;
+}
+
+static void lsh_insert_load(struct cpufreq_nexus_cpuinfo *cpuinfo, int load) {
+	// push back the first (n - 1) items for one slot, freeing up a[0]
+	memcpy(
+		cpuinfo->load_stabilization_history + 1,
+		cpuinfo->load_stabilization_history,
+		sizeof(int) * (LOAD_STABILIZATION_HISTORY_SIZE - 1));
+
+	// assigning the current workload
+	cpuinfo->load_stabilization_history[0] = load;
+}
+
+static u64 lsh_read_scaled_load(struct cpufreq_nexus_cpuinfo *cpuinfo) {
+	int i;
+	u64 total_load;
+
+	// add up all tracked workloads
+	total_load = 0;
+	for (i = 0; i < LOAD_STABILIZATION_HISTORY_SIZE; i++)
+		total_load += (u64)LOAD_STABILIZATION_SCALE(i, cpuinfo->load_stabilization_history[i]);
+
+	return total_load;
+}
+
+static int lsh_read_stabilized_load(struct cpufreq_nexus_cpuinfo *cpuinfo) {
+	u64 load = lsh_read_scaled_load(cpuinfo) / GAUSS_SUM(LOAD_STABILIZATION_HISTORY_SIZE);
+	return (int)load;
 }
 
 static int cpufreq_nexus_timer(struct cpufreq_nexus_cpuinfo *cpuinfo, struct cpufreq_policy *policy, struct cpufreq_nexus_tunables *tunables, int is_stopping)
@@ -264,38 +335,6 @@ static int cpufreq_nexus_timer(struct cpufreq_nexus_cpuinfo *cpuinfo, struct cpu
 		goto exit;
 	}
 
-	// revalidate custom frequencies
-	// -----
-	// we don't have to care about concurrency as this isn't a
-	// life-devastating routine if it is executed twice on different cores
-	if (tunables->freq_min_do_revalidate) {
-		freq_debug = tunables->freq_min;
-		tunables->freq_min = choose_frequency(cpuinfo, &index, tunables->freq_min);
-		tunables->freq_min_do_revalidate = 0;
-		nexus_debug("%s: cpu%d: revalidated freq_min: %u -> %u\n", __func__, cpu, freq_debug, tunables->freq_min);
-	}
-
-	if (tunables->freq_max_do_revalidate) {
-		freq_debug = tunables->freq_max;
-		tunables->freq_max = choose_frequency(cpuinfo, &index, tunables->freq_max);
-		tunables->freq_max_do_revalidate = 0;
-		nexus_debug("%s: cpu%d: revalidated freq_max: %u -> %u\n", __func__, cpu, freq_debug, tunables->freq_max);
-	}
-
-	if (tunables->boost_freq_do_revalidate) {
-		freq_debug = tunables->boost_freq;
-		tunables->boost_freq = choose_frequency(cpuinfo, &index, tunables->boost_freq);
-		tunables->boost_freq_do_revalidate = 0;
-		nexus_debug("%s: cpu%d: revalidated boost_freq: %u -> %u\n", __func__, cpu, freq_debug, tunables->boost_freq);
-	}
-
-	if (tunables->hispeed_freq_do_revalidate && tunables->hispeed_freq != 0) {
-		freq_debug = tunables->hispeed_freq;
-		tunables->hispeed_freq = choose_frequency(cpuinfo, &index, tunables->hispeed_freq);
-		tunables->hispeed_freq_do_revalidate = 0;
-		nexus_debug("%s: cpu%d: revalidated hispeed_freq: %u -> %u\n", __func__, cpu, freq_debug, tunables->hispeed_freq);
-	}
-
 	// calculate frequencies
 	nexus_debug("%s: cpu%d: init = %u\n", __func__, cpu, policy->cur);
 	freq = policy->cur;
@@ -305,7 +344,18 @@ static int cpufreq_nexus_timer(struct cpufreq_nexus_cpuinfo *cpuinfo, struct cpu
 		load_debug = load;
 		nexus_debug("%s: cpu%d: load = %u\n", __func__, cpu, load);
 
-		if (tunables->boost || ktime_now < tunables->boostpulse_end) {
+		if (tunables->load_stabilization && load < tunables->load_stabilization_threshold) {
+			mutex_lock(&cpuinfo->load_stabilization_mutex);
+			lsh_insert_load(cpuinfo, load);
+			load = lsh_read_stabilized_load(cpuinfo);
+			mutex_unlock(&cpuinfo->load_stabilization_mutex);
+
+			// TODO: ensure that the stabilized calculations
+			// are kept in limit properly
+			WARN_ON(load < 0 || load > 100);
+		}
+
+		if (tunables->boost || ktime_now < cpuinfo->boostpulse_end) {
 			nexus_debug("%s: cpu%d: boost = %u\n", __func__, cpu, tunables->boost_freq);
 			freq = tunables->boost_freq;
 		} else {
@@ -501,6 +551,14 @@ static int cpufreq_nexus_task(void *data)
 	static struct freq_attr _name##_gov_pol =               \
 		__ATTR(_name, 0666, NULL, store_##_name##_gov_pol)
 
+#define gov_sys_pol_show(_name)                            \
+	gov_sys_show(_name);                                   \
+	gov_pol_show(_name);                                   \
+	static struct global_attr _name##_gov_sys =            \
+		__ATTR(_name, 0666, show_##_name##_gov_sys, NULL); \
+	static struct freq_attr _name##_gov_pol =              \
+		__ATTR(_name, 0666, show_##_name##_gov_pol, NULL)
+
 /*
  * Show-Macros
  */
@@ -559,14 +617,15 @@ static ssize_t show_freq_min(struct cpufreq_nexus_tunables *tunables, char *buf)
 	return sprintf(buf, "%u\n", tunables->freq_min);
 }
 
-static ssize_t store_freq_min(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)  {
+static ssize_t store_freq_min(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)
+{
+	struct cpufreq_nexus_cpuinfo *cpuinfo = tunables->cpuinfo;
 	unsigned long val = 0;
-	int ret = kstrtoul(buf, 0, &val);
+	int index = 0, ret = kstrtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
 
-	tunables->freq_min = val;
-	tunables->freq_min_do_revalidate = 1;
+	tunables->freq_min = choose_frequency(cpuinfo, &index, val);
 
 	return count;
 }
@@ -576,14 +635,15 @@ static ssize_t show_freq_max(struct cpufreq_nexus_tunables *tunables, char *buf)
 	return sprintf(buf, "%u\n", tunables->freq_max);
 }
 
-static ssize_t store_freq_max(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)  {
+static ssize_t store_freq_max(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)
+{
+	struct cpufreq_nexus_cpuinfo *cpuinfo = tunables->cpuinfo;
 	unsigned long val = 0;
-	int ret = kstrtoul(buf, 0, &val);
+	int index = 0, ret = kstrtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
 
-	tunables->freq_max = val;
-	tunables->freq_max_do_revalidate = 1;
+	tunables->freq_max = choose_frequency(cpuinfo, &index, val);
 
 	return count;
 }
@@ -593,14 +653,15 @@ static ssize_t show_boost_freq(struct cpufreq_nexus_tunables *tunables, char *bu
 	return sprintf(buf, "%u\n", tunables->boost_freq);
 }
 
-static ssize_t store_boost_freq(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)  {
+static ssize_t store_boost_freq(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)
+{
+	struct cpufreq_nexus_cpuinfo *cpuinfo = tunables->cpuinfo;
 	unsigned long val = 0;
-	int ret = kstrtoul(buf, 0, &val);
+	int index = 0, ret = kstrtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
 
-	tunables->boost_freq = val;
-	tunables->boost_freq_do_revalidate = 1;
+	tunables->boost_freq = choose_frequency(cpuinfo, &index, val);
 
 	return count;
 }
@@ -610,26 +671,75 @@ static ssize_t show_hispeed_freq(struct cpufreq_nexus_tunables *tunables, char *
 	return sprintf(buf, "%u\n", tunables->hispeed_freq);
 }
 
-static ssize_t store_hispeed_freq(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)  {
+static ssize_t store_hispeed_freq(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)
+{
+	struct cpufreq_nexus_cpuinfo *cpuinfo = tunables->cpuinfo;
 	unsigned long val = 0;
-	int ret = kstrtoul(buf, 0, &val);
+	int index = 0, ret = kstrtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
 
-	tunables->hispeed_freq = val;
-	tunables->hispeed_freq_do_revalidate = 1;
+	tunables->hispeed_freq = choose_frequency(cpuinfo, &index, val);
 
 	return count;
 }
 
-static ssize_t store_boostpulse(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)  {
+static ssize_t show_boostpulse(struct cpufreq_nexus_tunables *tunables, char *buf)
+{
+	struct cpufreq_nexus_cpuinfo *cpuinfo = tunables->cpuinfo;
+	return sprintf(buf, "%d\n", (ktime_to_us(ktime_get()) < cpuinfo->boostpulse_end) ? 1 : 0);
+}
+
+static ssize_t store_boostpulse(struct cpufreq_nexus_tunables *tunables, const char *buf, size_t count)
+{
+	struct cpufreq_nexus_cpuinfo *cpuinfo = tunables->cpuinfo;
 	unsigned long val = 0;
 	int ret = kstrtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
 
-	tunables->boostpulse_end = ktime_to_us(ktime_get()) + tunables->boostpulse_duration;
+	cpuinfo->boostpulse_end = ktime_to_us(ktime_get()) + tunables->boostpulse_duration;
 	return count;
+}
+
+static ssize_t show_load_stabilization_debug(struct cpufreq_nexus_tunables *tunables, char *buf)
+{
+	struct cpufreq_nexus_cpuinfo *cpuinfo = tunables->cpuinfo;
+	ssize_t size = 0;
+	int i, j;
+
+	if (!cpuinfo || !cpuinfo->load_stabilization_history)
+		return 0;
+
+	mutex_lock(&cpuinfo->load_stabilization_mutex);
+
+	size = sprintf(buf, 
+		"load stabilization = %s\n"
+		"load stabilization result = %u\n"
+		"load stabilization table size = %d\n"
+		"\n"
+		"load stabilization table:\n"
+		"\n",
+			(tunables->load_stabilization ? "on" : "off"),
+			lsh_read_stabilized_load(cpuinfo),
+			LOAD_STABILIZATION_HISTORY_SIZE);
+
+	size = sprintf(buf, "%s     ", buf);
+	for (i = 0; i < 16; i++)
+		size = sprintf(buf, "%s%02x   ", buf, i);
+	size = sprintf(buf, "%s\n", buf);
+
+	for (i = 0; i < LOAD_STABILIZATION_HISTORY_SIZE; i += 16) {
+		size = sprintf(buf, "%s%02x  ", buf, i);
+		for (j = 0; j < 16 && ((i + j) < LOAD_STABILIZATION_HISTORY_SIZE); j++) {
+			size = sprintf(buf, "%s%3d  ", buf, cpuinfo->load_stabilization_history[i + j]);
+		}
+		size = sprintf(buf, "%s\n", buf);
+	}
+
+	mutex_unlock(&cpuinfo->load_stabilization_mutex);
+
+	return size;
 }
 
 gov_show_store(down_load);
@@ -652,6 +762,8 @@ gov_show_store(reset_stuck_timespan);
 gov_show_store(hispeed_load);
 gov_show_store(hispeed_delay);
 gov_show_store(hispeed_power_efficient);
+gov_show_store(load_stabilization);
+gov_show_store(load_stabilization_threshold);
 
 gov_sys_pol_show_store(down_load);
 gov_sys_pol_show_store(down_delay);
@@ -669,7 +781,7 @@ gov_sys_pol_show_store(freq_min);
 gov_sys_pol_show_store(freq_max);
 gov_sys_pol_show_store(boost_freq);
 gov_sys_pol_show_store(boost);
-gov_sys_pol_store(boostpulse);
+gov_sys_pol_show_store(boostpulse);
 gov_sys_pol_show_store(boostpulse_duration);
 gov_sys_pol_show_store(power_efficient);
 gov_sys_pol_show_store(frequency_step);
@@ -678,6 +790,9 @@ gov_sys_pol_show_store(hispeed_freq);
 gov_sys_pol_show_store(hispeed_load);
 gov_sys_pol_show_store(hispeed_delay);
 gov_sys_pol_show_store(hispeed_power_efficient);
+gov_sys_pol_show_store(load_stabilization);
+gov_sys_pol_show(load_stabilization_debug);
+gov_sys_pol_show_store(load_stabilization_threshold);
 
 static struct attribute *attributes_gov_sys[] = {
 	&down_load_gov_sys.attr,
@@ -705,6 +820,9 @@ static struct attribute *attributes_gov_sys[] = {
 	&hispeed_load_gov_sys.attr,
 	&hispeed_delay_gov_sys.attr,
 	&hispeed_power_efficient_gov_sys.attr,
+	&load_stabilization_gov_sys.attr,
+	&load_stabilization_debug_gov_sys.attr,
+	&load_stabilization_threshold_gov_sys.attr,
 	NULL // NULL has to be terminating entry
 };
 
@@ -739,6 +857,9 @@ static struct attribute *attributes_gov_pol[] = {
 	&hispeed_load_gov_pol.attr,
 	&hispeed_delay_gov_pol.attr,
 	&hispeed_power_efficient_gov_pol.attr,
+	&load_stabilization_gov_pol.attr,
+	&load_stabilization_debug_gov_pol.attr,
+	&load_stabilization_threshold_gov_pol.attr,
 	NULL // NULL has to be terminating entry
 };
 
@@ -796,7 +917,6 @@ static int cpufreq_governor_nexus(struct cpufreq_policy *policy, unsigned int ev
 			tunables->freq_max = policy->max;
 			tunables->boost_freq = policy->max;
 			tunables->boost = DEFAULT_BOOST;
-			tunables->boostpulse = 0;
 			tunables->boostpulse_duration = DEFAULT_BOOSTPULSE_DURATION;
 			tunables->power_efficient = DEFAULT_POWER_EFFICIENT;
 			tunables->frequency_step = DEFAULT_FREQUENCY_STEP;
@@ -805,6 +925,8 @@ static int cpufreq_governor_nexus(struct cpufreq_policy *policy, unsigned int ev
 			tunables->hispeed_load = DEFAULT_HISPEED_LOAD;
 			tunables->hispeed_delay = DEFAULT_HISPEED_DELAY;
 			tunables->hispeed_power_efficient = DEFAULT_HISPEED_POWER_EFFICIENT;
+			tunables->load_stabilization = DEFAULT_LOAD_STABILIZATION;
+			tunables->load_stabilization_threshold = DEFAULT_LOAD_STABILIZATION_THRESHOLD;
 
 			rc = sysfs_create_group(get_governor_parent_kobj(policy), get_attribute_group());
 			if (rc) {
@@ -852,7 +974,13 @@ static int cpufreq_governor_nexus(struct cpufreq_policy *policy, unsigned int ev
 				cpuinfo->policy = policy;
 				cpuinfo->init = 1;
 
+				cpuinfo->load_stabilization_history =
+					kzalloc(sizeof(int) * LOAD_STABILIZATION_HISTORY_SIZE, GFP_KERNEL);
+
+				tunables->cpuinfo = cpuinfo;
+
 				mutex_init(&cpuinfo->timer_mutex);
+				mutex_init(&cpuinfo->load_stabilization_mutex);
 
 				delay = usecs_to_jiffies(tunables->timer_rate);
 				if (num_online_cpus() > 1) {
@@ -882,6 +1010,10 @@ static int cpufreq_governor_nexus(struct cpufreq_policy *policy, unsigned int ev
 
 				cpuinfo = &per_cpu(gov_cpuinfo, work_cpu);
 				tunables = policy->governor_data;
+
+				tunables->cpuinfo = NULL;
+
+				kfree(cpuinfo->load_stabilization_history);
 
 				kthread_stop(cpuinfo->work);
 				put_task_struct(cpuinfo->work);
