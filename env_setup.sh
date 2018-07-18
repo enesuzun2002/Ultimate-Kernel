@@ -90,7 +90,7 @@ export TMPFILE=`mktemp -t`;
 
 
 # system compiler
-export CROSS_COMPILE=/home/enes_ultimate2018/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+export CROSS_COMPILE=/home/andrepl240/aarch64-linux-android-4.9/bin/aarch64-linux-android-
 
 # CPU Core
 export NUMBEROFCPUS=`grep 'processor' /proc/cpuinfo | wc -l`;
