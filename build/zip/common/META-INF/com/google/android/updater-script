@@ -1,0 +1,47 @@
+set_progress(1.000000);
+ui_print("");
+ui_print("");
+ui_print("------------------------------");
+ui_print("--Installing Ultimate Kernel--");
+ui_print("------------------------------");
+ui_print("---------enesuzun2002---------");
+ui_print("------------------------------");
+ui_print("");
+ui_print("");
+
+ui_print(" ");
+ui_print("Mounting System...");
+run_program("/sbin/mount", "/dev/block/platform/15570000.ufs/by-name/SYSTEM", "/system");
+
+# Copy scripts
+package_extract_dir("script", "/tmp/script");
+set_perm_recursive(0, 0, 0777, 0777, "/tmp/script");
+
+
+ui_print("Flashing kernel");
+ifelse
+(
+is_substring("G925", getprop("ro.boot.bootloader"))
+,
+ui_print("    - G925 S6 Edge");
+,
+ui_print("    - G920 S6 Flat");
+);
+run_program("/tmp/script/flash_kernel.sh");
+ui_print(" - Done.");
+
+ui_print(" ");
+ui_print("Extracting Files...");
+package_extract_dir("system", "/system");
+ui_print(" ");
+ui_print("Unmounting system...");
+unmount("/system");
+ui_print("");
+ui_print("");
+ui_print("------------------------------");
+ui_print("---Installed Ultimate Kernel--");
+ui_print("------------------------------");
+ui_print("---------enesuzun2002---------");
+ui_print("------------------------------");
+ui_print("");
+ui_print("");

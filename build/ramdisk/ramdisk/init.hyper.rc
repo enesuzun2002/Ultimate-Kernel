@@ -1,0 +1,24 @@
+on init
+
+service sswap /sbin/sswap -s -f 2048
+    class core
+    user root
+    group root
+    oneshot
+	disabled
+
+on boot
+   # Restore the previous batt_capacity_max (if it exists)
+    copy /efs/Battery/prev_batt_capacity_max /sys/class/power_supply/battery/batt_capacity_max
+
+on property:sys.boot_completed=1
+    start sswap
+
+on property:sys.boot_completed=1
+   # Restore Stock Max GPU Freq
+   write /sys/devices/14ac0000.mali/dvfs_max_lock 700
+
+on shutdown
+    # Fix permissions then store the current batt_capacity_max value in the EFS partition
+    chmod 600 /sys/class/power_supply/battery/batt_capacity_max
+    copy /sys/class/power_supply/battery/batt_capacity_max /efs/Battery/prev_batt_capacity_max
