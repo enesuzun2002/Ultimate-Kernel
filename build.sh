@@ -33,7 +33,7 @@ DEFCONFIG=ultimate_defconfig
 DEFCONFIG_S6EDGE=ultimate_defconfig_edge
 DEFCONFIG_S6FLAT=ultimate_defconfig_flat
 
-export K_VERSION="v1.2."
+export K_VERSION="v1.2.1"
 export K_NAME="Ultimate-Kernel"
 export REVISION="RC"
 export KBUILD_BUILD_VERSION="1"
