@@ -333,7 +333,7 @@ config CPU_FREQ_GOV_INTELLIACTIVE
 
 	  For details, take a look at linux/Documentation/cpu-freq.
 
-      If in doubt, say N.
+	  If in doubt, say N.
 
 config CPU_FREQ_GOV_INTELLIDEMAND
     tristate "'intellidemand' cpufreq policy governor"
