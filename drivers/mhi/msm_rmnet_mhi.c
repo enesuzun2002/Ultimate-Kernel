@@ -852,7 +852,7 @@ static int rmnet_mhi_open(struct net_device *dev)
 	 * Like net-sysfs, argos module also should support sysfs knob,
 	 * so that user layer must be able to control these cpu mask. */
 
-	cpumask_copy(rmnet_mhi_ptr->dmask, &hmp_slow_cpu_mask);
+	cpumask_copy(rmnet_mhi_ptr->dmask, cpu_coregroup_mask(0));
 
 	argos_irq_affinity_setup_label(
 		MSI_TO_IRQ(rmnet_mhi_ptr->rx_client_handle->mhi_dev_ctxt,

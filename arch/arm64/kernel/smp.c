@@ -726,9 +726,9 @@ void flush_all_cpu_caches(void)
 	cluster = MPIDR_AFFINITY_LEVEL(cpu_logical_map(cpu), 1);
 
 	if (!cluster)
-		target_cpu = first_cpu(hmp_slow_cpu_mask);
+		target_cpu = first_cpu(cpu_coregroup_mask(0));
 	else
-		target_cpu = first_cpu(hmp_fast_cpu_mask);
+		target_cpu = first_cpu(cpu_coregroup_mask(4));
 
 	smp_call_function(flush_all_cpu_cache, NULL, 1);
 	smp_call_function_single(target_cpu, flush_all_cluster_cache, NULL, 1);

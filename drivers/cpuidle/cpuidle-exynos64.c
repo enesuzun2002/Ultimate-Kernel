@@ -401,7 +401,7 @@ static int __init exynos_init_cpuidle(void)
 {
 	int ret;
 
-	ret = exynos_idle_state_init(&exynos64_idle_cluster0_driver, &hmp_fast_cpu_mask);
+	ret = exynos_idle_state_init(&exynos64_idle_cluster0_driver, cpu_coregroup_mask(4));
 	if (ret) {
 		pr_err("fail exynos_idle_state_init(cluster 0) ret = %d\n", ret);
 		return ret;
@@ -410,7 +410,7 @@ static int __init exynos_init_cpuidle(void)
 	cpuidle_profile_state_init(&exynos64_idle_cluster0_driver);
 
 	exynos64_idle_cluster0_driver.safe_state_index = IDLE_C1;
-	exynos64_idle_cluster0_driver.cpumask = &hmp_fast_cpu_mask;
+	exynos64_idle_cluster0_driver.cpumask = cpu_coregroup_mask(4);
 	ret = cpuidle_register(&exynos64_idle_cluster0_driver, NULL);
 
 	if (ret) {
@@ -418,14 +418,14 @@ static int __init exynos_init_cpuidle(void)
 		return ret;
 	}
 
-	ret = exynos_idle_state_init(&exynos64_idle_cluster1_driver, &hmp_slow_cpu_mask);
+	ret = exynos_idle_state_init(&exynos64_idle_cluster1_driver, cpu_coregroup_mask(0));
 	if (ret) {
 		pr_err("fail exynos_idle_state_init(cluster 1) ret = %d\n", ret);
 		return ret;
 	}
 
 	exynos64_idle_cluster1_driver.safe_state_index = IDLE_C1;
-	exynos64_idle_cluster1_driver.cpumask = &hmp_slow_cpu_mask;
+	exynos64_idle_cluster1_driver.cpumask = cpu_coregroup_mask(0);
 	ret = cpuidle_register(&exynos64_idle_cluster1_driver, NULL);
 
 	if (ret) {

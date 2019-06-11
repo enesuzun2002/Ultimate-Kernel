@@ -282,7 +282,7 @@ static int check_powerstate_nonbootcpus(void)
 	int cpu;
 	int ret = false;
 
-	for_each_cpu_and(cpu, cpu_possible_mask, &hmp_slow_cpu_mask) {
+	for_each_cpu_and(cpu, cpu_possible_mask, cpu_coregroup_mask(0)) {
 		if (cpu == 0)
 			continue;
 		ret |= exynos_cpu.power_state(cpu);

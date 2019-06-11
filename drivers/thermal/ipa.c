@@ -176,10 +176,10 @@ static void setup_cpusmasks(struct cluster_stats *cl_stats)
 		pr_warn("unable to allocate cpumask");
 
 	cpumask_setall(cl_stats[CL_ONE].mask);
-	if (strlen(CONFIG_HMP_FAST_CPU_MASK))
-		cpulist_parse(CONFIG_HMP_FAST_CPU_MASK, cl_stats[CL_ONE].mask);
+	if (strlen(cpu_coregroup_mask(4)))
+		cpulist_parse(cpu_coregroup_mask(4), cl_stats[CL_ONE].mask);
 	else
-		pr_warn("IPA: No CONFIG_HMP_FAST_CPU_MASK found.\n");
+		pr_warn("IPA: No fast cpu mask found.\n");
 
 	cpumask_andnot(cl_stats[CL_ZERO].mask, cpu_present_mask, cl_stats[CL_ONE].mask);
 }

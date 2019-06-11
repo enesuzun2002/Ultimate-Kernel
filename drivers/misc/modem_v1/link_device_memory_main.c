@@ -934,7 +934,7 @@ static int mem_rx_setup(struct link_device *ld)
 	/* Below hard-coded mask values should be removed later on.
 	 * Like net-sysfs, argos module also should support sysfs knob,
 	 * so that user layer must be able to control these cpu mask. */
-	cpumask_copy(mld->dmask, &hmp_slow_cpu_mask);
+	cpumask_copy(mld->dmask, cpu_coregroup_mask(0));
 
 	cpumask_or(mld->imask, mld->imask, cpumask_of(3));
 

@@ -595,7 +595,7 @@ void __ref enable_nonboot_cpus(void)
 
 #if defined(CONFIG_SCHED_HMP) && defined(CONFIG_EXYNOS5_DYNAMIC_CPU_HOTPLUG)
 	if (!disable_dm_hotplug_before_suspend && !fp_lockscreen_mode)
-		cpumask_and(frozen_cpus, frozen_cpus, &hmp_slow_cpu_mask);
+		cpumask_and(frozen_cpus, frozen_cpus, cpu_coregroup_mask(0));
 #endif
 
 	for_each_cpu(cpu, frozen_cpus) {

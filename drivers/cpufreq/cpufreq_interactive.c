@@ -530,8 +530,8 @@ static unsigned int check_mode(int cpu, unsigned int cur_mode, u64 now)
 	if (now - tunables->mode_check_timestamp > tunables->timer_rate + USEC_PER_MSEC)
 		tunables->mode_check_timestamp = now - tunables->timer_rate;
 
-	if(cpumask_test_cpu(cpu, &hmp_fast_cpu_mask)) {
-		for_each_cpu_mask(i, hmp_fast_cpu_mask) {
+	if(cpumask_test_cpu(cpu, cpu_coregroup_mask(4))) {
+		for_each_cpu_mask(i, cpu_coregroup_mask(4)) {
 			cur_loadinfo = &per_cpu(loadinfo, i);
 			if (now - cur_loadinfo->timestamp <= tunables->timer_rate + USEC_PER_MSEC) {
 				total_load += cur_loadinfo->load;

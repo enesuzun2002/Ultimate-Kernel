@@ -465,11 +465,11 @@ void __init arch_get_fast_and_slow_cpus(struct cpumask *fast,
 	 * Use the config options if they are given. This helps testing
 	 * HMP scheduling on systems without a big.LITTLE architecture.
 	 */
-	if (strlen(CONFIG_HMP_FAST_CPU_MASK) && strlen(CONFIG_HMP_SLOW_CPU_MASK)) {
-		if (cpulist_parse(CONFIG_HMP_FAST_CPU_MASK, fast))
-			WARN(1, "Failed to parse HMP fast cpu mask!\n");
-		if (cpulist_parse(CONFIG_HMP_SLOW_CPU_MASK, slow))
-			WARN(1, "Failed to parse HMP slow cpu mask!\n");
+	if (strlen(cpu_coregroup_mask(4)) && strlen(cpu_coregroup_mask(0))) {
+		if (cpulist_parse(Ccpu_coregroup_mask(4), fast))
+			WARN(1, "Failed to parse fast cpu mask!\n");
+		if (cpulist_parse(cpu_coregroup_mask(0), slow))
+			WARN(1, "Failed to parse slow cpu mask!\n");
 		return;
 	}
 
@@ -519,23 +519,23 @@ void __init arch_get_hmp_domains(struct list_head *hmp_domains_list)
 {
 	struct hmp_domain *domain;
 
-	arch_get_fast_and_slow_cpus(&hmp_fast_cpu_mask, &hmp_slow_cpu_mask);
+	arch_get_fast_and_slow_cpus(cpu_coregroup_mask(4), cpu_coregroup_mask(0));
 
 	/*
 	 * Initialize hmp_domains
 	 * Must be ordered with respect to compute capacity.
 	 * Fastest domain at head of list.
 	 */
-	if(!cpumask_empty(&hmp_slow_cpu_mask)) {
+	if(!cpumask_empty(cpu_coregroup_mask(0))) {
 		domain = (struct hmp_domain *)
 			kmalloc(sizeof(struct hmp_domain), GFP_KERNEL);
-		cpumask_copy(&domain->possible_cpus, &hmp_slow_cpu_mask);
+		cpumask_copy(&domain->possible_cpus, cpu_coregroup_mask(0));
 		cpumask_and(&domain->cpus, cpu_online_mask, &domain->possible_cpus);
 		list_add(&domain->hmp_domains, hmp_domains_list);
 	}
 	domain = (struct hmp_domain *)
 		kmalloc(sizeof(struct hmp_domain), GFP_KERNEL);
-	cpumask_copy(&domain->possible_cpus, &hmp_fast_cpu_mask);
+	cpumask_copy(&domain->possible_cpus, cpu_coregroup_mask(4));
 	cpumask_and(&domain->cpus, cpu_online_mask, &domain->possible_cpus);
 	list_add(&domain->hmp_domains, hmp_domains_list);
 }

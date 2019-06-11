@@ -257,11 +257,11 @@ static unsigned int check_slow_mode(int cpu, unsigned int cur_mode, u64 now)
 	if (now - tunables->slow_mode_check_timestamp > tunables->timer_rate + USEC_PER_MSEC)
 		tunables->slow_mode_check_timestamp = now - tunables->timer_rate;
 
-	for_each_cpu_mask(i, hmp_slow_cpu_mask) {
+	for_each_cpu_mask(i, cpu_coregroup_mask(0)) {
 		struct observer_cpuinfo *picpu = &per_cpu(slow_cpuinfo, i);
 		total_slow_load += picpu->cpuload;
 	}
-	for_each_cpu_mask(i, hmp_fast_cpu_mask) {
+	for_each_cpu_mask(i, cpu_coregroup_mask(4)) {
 		struct observer_cpuinfo *picpu = &per_cpu(slow_cpuinfo, i);
 		total_fast_load += picpu->cpuload;
 	}

@@ -3410,7 +3410,7 @@ dhd_dpc_thread(void *data)
 				free_cpumask_var(dhd->pub.default_cpu_mask);
 				dhd->pub.affinity_isdpc = FALSE;
 			} else {
-				cpumask_copy(dhd->pub.default_cpu_mask, &hmp_slow_cpu_mask);
+				cpumask_copy(dhd->pub.default_cpu_mask, cpu_coregroup_mask(0));
 				cpumask_or(dhd->pub.dpc_affinity_cpu_mask,
 					dhd->pub.dpc_affinity_cpu_mask, cpumask_of(DPC_CPUCORE));
 
@@ -5249,7 +5249,7 @@ dhd_attach(osl_t *osh, struct dhd_bus *bus, uint bus_hdrlen)
 					free_cpumask_var(dhd->pub.default_cpu_mask);
 					dhd->pub.affinity_isdpc = FALSE;
 				} else {
-					cpumask_copy(dhd->pub.default_cpu_mask, &hmp_slow_cpu_mask);
+					cpumask_copy(dhd->pub.default_cpu_mask, cpu_coregroup_mask(0));
 					cpumask_or(dhd->pub.dpc_affinity_cpu_mask,
 					dhd->pub.dpc_affinity_cpu_mask,
 					cpumask_of(TASKLET_CPUCORE));

@@ -1304,22 +1304,6 @@ static inline void cpufreq_sched_reset_cap(int cpu)
 { }
 #endif
 
-extern struct static_key __sched_energy_freq;
-static inline bool sched_energy_freq(void)
-{
-	return static_key_false(&__sched_energy_freq);
-}
-
-#ifdef CONFIG_CPU_FREQ_GOV_SCHED
-void cpufreq_sched_set_cap(int cpu, unsigned long util);
-void cpufreq_sched_reset_cap(int cpu);
-#else
-static inline void cpufreq_sched_set_cap(int cpu, unsigned long util)
-{ }
-static inline void cpufreq_sched_reset_cap(int cpu)
-{ }
-#endif
-
 extern void sysrq_sched_debug_show(void);
 extern void sched_init_granularity(void);
 extern void update_max_interval(void);
@@ -1351,12 +1335,6 @@ static inline void add_nr_running(struct rq *rq, unsigned count)
 	rq->nr_running = prev_nr + count;
 
 	if (prev_nr < 2 && rq->nr_running >= 2) {
-#ifdef CONFIG_SMP
-		if (!rq->rd->overload)
-			rq->rd->overload = true;
-#endif
-
-	if (rq->nr_running >= 2) {
 #ifdef CONFIG_SMP
 		if (!rq->rd->overload)
 			rq->rd->overload = true;
@@ -1704,15 +1682,8 @@ static inline u64 irq_time_read(int cpu)
 #endif /* CONFIG_64BIT */
 #endif /* CONFIG_IRQ_TIME_ACCOUNTING */
 
-static inline void account_reset_rq(struct rq *rq)
-{
-#ifdef CONFIG_IRQ_TIME_ACCOUNTING
-	rq->prev_irq_time = 0;
-#endif
-#ifdef CONFIG_PARAVIRT
-	rq->prev_steal_time = 0;
-#endif
-#ifdef CONFIG_PARAVIRT_TIME_ACCOUNTING
-	rq->prev_steal_time_rq = 0;
-#endif
-}
+/*
+ * task_may_not_preempt - check whether a task may not be preemptible soon
+ */
+extern bool task_may_not_preempt(struct task_struct *task, int cpu);
+

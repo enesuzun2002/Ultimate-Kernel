@@ -1325,7 +1325,7 @@ select_task_rq_rt(struct task_struct *p, int cpu, int sd_flag, int flags)
 	 */
 	if (curr && unlikely(rt_task(curr)) &&
 	    (curr->nr_cpus_allowed < 2 ||
-	     curr->prio <= p->prio)))) {
+	     curr->prio <= p->prio)) {
 		int target = find_lowest_rq(p);
 
 		if (target != -1)
