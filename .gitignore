@@ -55,6 +55,7 @@ modules.builtin
 #
 !.gitignore
 !.mailmap
+!.placeholder
 
 #
 # Generated include files
@@ -193,17 +194,3 @@ x509.genkey
 # Exynos7420
 #
 !/init/vmm.elf
-
-output/*
-
-*.md5 
-
-dt.img
-
-build_kernel/G920F/Image
-
-build_kernel/G920F/boot.img
-
-build_kernel/G925F/Image
-
-build_kernel/G925F/boot.img
