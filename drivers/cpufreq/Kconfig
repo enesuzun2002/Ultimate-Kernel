@@ -318,6 +318,43 @@ config MODE_AUTO_CHANGE
 	help
 		automatic governor parameter change by MODE
 
+config CPU_FREQ_GOV_INTELLIACTIVE
+ tristate "'intelliactive' cpufreq policy governor"
+ help
+	  'intelliactive' - This driver adds a dynamic cpufreq policy governor
+	  designed for latency-sensitive workloads.
+
+	  This governor attempts to reduce the latency of clock
+	  increases so that the system is more responsive to
+	  interactive workloads.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called cpufreq_intelliactive.
+
+	  For details, take a look at linux/Documentation/cpu-freq.
+
+      If in doubt, say N.
+
+config CPU_FREQ_GOV_INTELLIDEMAND
+    tristate "'intellidemand' cpufreq policy governor"
+    select CPU_FREQ_TABLE
+	select CPU_FREQ_GOV_COMMON
+    help
+	  'intellidemand' - This driver adds a dynamic cpufreq policy governor.
+	  The governor does a periodic polling and 
+	  changes frequency based on the CPU utilization.
+	  The support for this governor depends on CPU capability to
+	  do fast frequency switching (i.e, very low latency frequency
+	  transitions). 
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called cpufreq_intellidemand.
+
+	  For details, take a look at linux/Documentation/cpu-freq.
+
+	  If in doubt, say N
+
+
 config CPU_FREQ_GOV_CONSERVATIVE
 	tristate "'conservative' cpufreq governor"
 	depends on CPU_FREQ
