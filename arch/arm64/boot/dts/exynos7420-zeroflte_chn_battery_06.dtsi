@@ -202,7 +202,7 @@
 		battery,discharging_ntc_limit = <2750>;
 
 		battery,swelling_high_temp_block = <410>;
-		battery,swelling_high_temp_recov = <360>;
+		battery,swelling_high_temp_recov = <390>;
 		battery,swelling_low_temp_block = <100>;
 		battery,swelling_low_temp_recov = <150>;
 		battery,swelling_chg_current = <1100>;

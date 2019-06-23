@@ -954,6 +954,7 @@
 			#dma-channels = <8>;
 			#dma-requests = <16>;
 			#dma-mcode-addr = <0x03047000>;
+			#dma-multi-irq = <1>;
 			samsung,lpass-subip;
 			status = "ok";
 		};
@@ -2081,8 +2082,9 @@
 		boot_device@8 {
 			net_boost,label="WIFI RX";
 			net_boost,node="wlan0";
-			net_boost,table_size = <4>;
+			net_boost,table_size = <5>;
 			net_boost,table= <
+				75 1000000 0 800000 0 0 0 0 0 0
 				100 1144000 0 1066000 0 0 0 0 0 0
 				150 1456000 0 1378000 0 0 0 0 0 0
 				200 1664000 0 1586000 0 845000 400000 1 1 1
@@ -2151,8 +2153,8 @@
 
 			/* Time table */
 			input_booster,head_times = <130 130 0>;
-			input_booster,tail_times = <500 500 0>;
-            input_booster,phase_times = <0 0 0>;
+			input_booster,tail_times = <0 0 500>;
+			input_booster,phase_times = <0 0 0>;
 		};
 		booster_key@4 { // Input Booster +
 			input_booster,label = "MULTITOUCH";
@@ -2169,9 +2171,9 @@
 			input_booster,int_freqs = <0 0>;
 
 			/* Time table */
-			input_booster,head_times = <1000 1000>;
-			input_booster,tail_times = <500 500>;
-            input_booster,phase_times = <0 0>;
+			input_booster,head_times = <1000 0>;
+			input_booster,tail_times = <0 500>;
+			input_booster,phase_times = <0 0>;
 		};
 		booster_key@5 {
 			input_booster,label = "KEYBOARD";
@@ -2190,7 +2192,7 @@
 			/* Time table */
 			input_booster,head_times = <130 130>;
 			input_booster,tail_times = <0 0>;
-input_booster,phase_times = <0 0>;
+			input_booster,phase_times = <0 0>;
 		};
 		booster_key@6 {
 			input_booster,label = "MOUSE";
@@ -2207,9 +2209,9 @@ input_booster,phase_times = <0 0>;
 			input_booster,int_freqs = <0 0>;
 
 			/* Time table */
-			input_booster,head_times = <130 130>;
-			input_booster,tail_times = <500 500>;
-            input_booster,phase_times = <0 0>;
+			input_booster,head_times = <130 0>;
+			input_booster,tail_times = <0 500>;
+			input_booster,phase_times = <0 0>;
 		};
 		booster_key@7 {
 			input_booster,label = "MOUSE WHEEL";
@@ -2228,7 +2230,7 @@ input_booster,phase_times = <0 0>;
 			/* Time table */
 			input_booster,head_times = <130 0>;
 			input_booster,tail_times = <0 0>;
-            input_booster,phase_times = <0 0>;
+			input_booster,phase_times = <0 0>;
 		};
 		booster_key@8 {
 			input_booster,label = "PEN HOVER";
@@ -2245,9 +2247,9 @@ input_booster,phase_times = <0 0>;
 			input_booster,int_freqs = <0 0>;
 
 			/* Time table */
-			input_booster,head_times = <130 130>;
-			input_booster,tail_times = <500 500>;
-            input_booster,phase_times = <0 0>;
+			input_booster,head_times = <130 0>;
+			input_booster,tail_times = <0 500>;
+			input_booster,phase_times = <0 0>;
 		}; // Input Booster -
 		/* If you need to add new key type, add it this position */
 	};

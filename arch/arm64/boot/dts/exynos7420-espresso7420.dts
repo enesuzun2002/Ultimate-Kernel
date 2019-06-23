@@ -96,7 +96,7 @@
 	};
 
 	chosen {
-		bootargs = "console=ttySAC2,115200n8 ess_setup=0x46000000 androidboot.selinux=permissive";
+		bootargs = "console=ram ess_setup=0x46000000 androidboot.hardware=samsungexynos7420 androidboot.selinux=permissive";
 		linux,initrd-start = <0x42000000>;
 		linux,initrd-end = <0x420FFFFF>;
 	};
@@ -163,11 +163,51 @@
 		};
 	};
 
+	dwmmc1@15750000 {
+		status = "disabled";
+		num-slots = <1>;
+		channel = <1>;
+		fixed_volt;
+		clock-gate;
+		enable-cclk-on-suspend;
+		caps-control;
+		supports-highspeed;
+		supports-sdr104-mode;
+		not-allow-single-dma;
+		fix-fmp-size-mismatch;
+		keep-power-in-suspend;
+		pm-ignore-notify;
+		cd-type-external;
+		cd-type = <2>;
+		se-broken-voltage;
+		use-fine-tuning;
+		ignore-phase = <(1 << 7)>;
+		fifo-depth = <0x40>;
+		card-detect-delay = <200>;
+		qos_int_level = <400000>;
+		samsung,dw-mshc-ciu-div = <3>;
+		samsung,dw-mshc-sdr-timing = <3 0 2 0>;
+		samsung,dw-mshc-ddr-timing = <3 0 3 2>;
+		clk_pin = "gpr2-0";
+		clk_addr = "15690000.pinctrl";
+		clk_val = <0x2>;
+		clk_str_num = <6>;
+		num-ref-clks = <8>;
+		ciu_clkin = <25 50 50 100 200 100 200 400>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&sd1_clk &sd1_cmd &sd1_bus1 &sd1_bus4>;
+		slot@0 {
+			reg = <0>;
+			bus-width = <4>;
+		};
+	};
+
 	dwmmc2@15560000 {
 		status = "okay";
 		num-slots = <1>;
+		caps-control;
 		supports-highspeed;
-		supports-sdr50-mode;
+		supprots-sdr50-mode;
 		supports-sdr104-mode;
 		enable-cclk-on-suspend;
 		cd-type = <1>;
@@ -186,7 +226,7 @@
 		fix-fmp-size-mismatch;
 		not-allow-single-dma;
 		samsung,dw-mshc-ciu-div = <3>;
-		samsung,dw-mshc-sdr-timing = <3 0 2 0>;
+		samsung,dw-mshc-sdr-timing = <3 0 2 1>;
 		samsung,dw-mshc-ddr-timing = <3 0 2 1>;
 		samsung,dw-mshc-sdr50-timing = <3 0 3 2>;
 		samsung,dw-mshc-sdr104-timing = <3 0 3 1>;
@@ -1626,6 +1666,7 @@
 			#dma-channels = <8>;
 			#dma-requests = <16>;
 			#dma-mcode-addr = <0x03047000>;
+			#dma-multi-irq = <1>;
 			samsung,lpass-subip;
 			status = "ok";
 		};

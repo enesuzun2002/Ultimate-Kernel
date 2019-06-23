@@ -100,7 +100,7 @@
 		PIN_SLP(gpd2-3, INPUT, NONE);	/* IF_PMIC_SCL */
 		PIN_SLP(gpd2-4, INPUT, DOWN);	/* NC */
 		PIN_SLP(gpd2-5, OUT0, NONE);	/* VIBTONE_PWM */
-		PIN_SLP(gpd2-6, INPUT, DOWN);	/* NC */
+		PIN_SLP(gpd2-6, PREV, NONE);	/* NC */
 		PIN_SLP(gpd2-7, INPUT, DOWN);	/* NC */
 
 		PIN_SLP(gpd4-0, INPUT, DOWN);	/* NC */
@@ -367,7 +367,7 @@
 		PIN_SLP(gpr2-3, INPUT, DOWN);	/* NC */
 		PIN_SLP(gpr2-4, INPUT, DOWN);	/* NC */
 
-		PIN_SLP(gpr3-0, INPUT, DOWN);	/* M_DISPLAY_RST */
+		PIN_SLP(gpr3-0, PREV, NONE);	/* M_DISPLAY_RST */
 		PIN_SLP(gpr3-1, INPUT, DOWN);	/* DISPLAY_DET */
 		PIN_SLP(gpr3-2, INPUT, NONE);	/* NC*/
 		PIN_SLP(gpr3-3, INPUT, DOWN);	/* DUAL_SIM */

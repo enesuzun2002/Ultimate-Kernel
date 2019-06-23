@@ -111,7 +111,7 @@
 		PIN_SLP(gpd2-3, INPUT, NONE);	/* IF_PMIC_SCL */
 		PIN_SLP(gpd2-4, INPUT, DOWN);	/* NC */
 		PIN_SLP(gpd2-5, OUT0, NONE);	/* VIBTONE_PWM */
-		PIN_SLP(gpd2-6, INPUT, DOWN);	/* NC */
+		PIN_SLP(gpd2-6, PREV, NONE);	/* NC */
 		PIN_SLP(gpd2-7, INPUT, DOWN);	/* NC */
 
 		PIN_SLP(gpd4-0, INPUT, DOWN);	/* NC */

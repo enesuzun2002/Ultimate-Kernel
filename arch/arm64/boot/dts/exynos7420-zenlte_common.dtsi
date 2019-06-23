@@ -977,6 +977,7 @@
 			#dma-channels = <8>;
 			#dma-requests = <16>;
 			#dma-mcode-addr = <0x03047000>;
+			#dma-multi-irq = <1>;
 			samsung,lpass-subip;
 			status = "ok";
 		};

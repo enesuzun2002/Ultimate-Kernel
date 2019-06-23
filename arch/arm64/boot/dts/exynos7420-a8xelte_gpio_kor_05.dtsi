@@ -346,13 +346,9 @@
 	pinctrl-0 = <&initial8>;
 	pinctrl-1 = <&sleep8>;
 	initial8: initial-state {
-		PIN_IN(gpr3-4, DOWN, LV1);	/* NC */
-
 		PIN_IN(gpr4-2, DOWN, LV1);	/* NC */
 	};
 	sleep8: sleep-state {
-		PIN_SLP(gpr3-4, INPUT, DOWN);	/* NC */
-
 		PIN_SLP(gpr4-2, INPUT, DOWN);	/* NC */
 	};
 };
@@ -371,6 +367,8 @@
 		PIN_IN(gpr1-5, DOWN, LV1);	/* NC */
 
 		PIN_OUT_SET(gpr1-2, 1, LV1);	/* SSP_RST */
+
+		PIN_IN(gpr3-4, DOWN, LV1);	/* NC */
 	};
 	sleep9: sleep-state {
 		PIN_SLP(gpr0-0, INPUT, DOWN);	/* NFC_PWR_REQ */

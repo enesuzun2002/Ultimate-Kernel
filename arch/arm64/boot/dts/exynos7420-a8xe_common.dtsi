@@ -35,7 +35,7 @@
 		video {
 			compatible = "exynos5433-ion,video";
 			secure;
-			reg = <0xE2A00000 0xE400000>;
+			reg = <0xE2A00000 0x9400000>;
 			id = <11>;
 			compat-id = <4 5 6 7>;
 		};
@@ -43,7 +43,7 @@
 		video_ext {
 			compatible = "exynos5433-ion,video_ext";
 			secure;
-			reg = <0xF0E00000 0x600000>;
+			reg = <0xF0E00000 0xC00000>;
 			id = <1>;
 		};
 
@@ -1946,16 +1946,6 @@
 				>;
 		};
 		boot_device@4 {
-			net_boost,label="WIFI";
-			net_boost,node="wlan0";
-			net_boost,table_size = <3>;
-			net_boost,table= <
-				20 1000000 0 800000 0 0 200000 0 0 0
-				60 1500000 0 1200000 0 0 200000 0 0 0
-				180 1896000 0 1500000 0 543000 267000 1 1 1
-				>;
-		};
-		boot_device@5 {
 			net_boost,label="CLAT";
 			net_boost,node="clat clat4";
 			net_boost,table_size = <3>;
@@ -1966,13 +1956,34 @@
 				>;
 		};
 
-		boot_device@6 {
+		boot_device@5 {
 			net_boost,label="QIPC";
 			net_boost,node="rmnet_data0 rmnet_data1 rmnet_data2 rmnet_data3 rmnet_data4 rmnet_data5 rmnet_data6 rmnet_data7";
 			net_boost,table_size = <2>;
 			net_boost,table= <
 				10 0 0 1104000 0 825000 100000 0 1 0 /* 10Mbps little core 1.1G */
 				100 0 0 1500000 0 825000 100000 0 1 0 /* 100Mbps little core 1.5G */
+				>;
+		};
+
+		boot_device@6 {
+			net_boost,label="WIFI RX";
+			net_boost,node="wlan0";
+			net_boost,table_size = <2>;
+			net_boost,table= <
+				80 1500000 0 1200000 0 0 200000 0 0 0
+				150 1896000 0 1500000 0 543000 267000 1 1 1
+				>;
+		};
+
+		boot_device@7 {
+			net_boost,label="WIFI TX";
+			net_boost,node="wlan0";
+			net_boost,table_size = <3>;
+			net_boost,table= <
+				20 1000000 0 800000 0 0 200000 0 0 0
+				60 1500000 0 1200000 0 0 200000 0 0 0
+				150 1896000 0 1500000 0 543000 267000 1 1 1
 				>;
 		};
 	};

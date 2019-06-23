@@ -1,0 +1,7 @@
+#
+# Automatically generated file; DO NOT EDIT.
+# Linux/arm64 3.10.61 Kernel Configuration
+#
+
+CONFIG_SND_SOC_ES705=y
+CONFIG_SND_SOC_ES_I2C=y

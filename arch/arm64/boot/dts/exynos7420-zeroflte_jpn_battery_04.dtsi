@@ -197,25 +197,24 @@
 		battery,mix_input_limit_current_hv = <100>;
 
 		/* SEC_BATTERY_FULL_CONDITION_SOC |
-		   SEC_BATTERY_FULL_CONDITION_NOTIMEFULL |
 		   SEC_BATTERY_FULL_CONDITION_VCELL */
-		battery,full_condition_type = <13>;
+		battery,full_condition_type = <9>;
 		battery,full_condition_soc = <93>;
-		battery,full_condition_vcell = <4250>;
+		battery,full_condition_vcell = <4100>;
 
 		battery,recharge_check_count = <2>;
 		battery,recharge_condition_type = <4>; /* SEC_BATTERY_RECHARGE_CONDITION_VCELL */
-		battery,recharge_condition_soc = <98>;
-		battery,recharge_condition_vcell = <4300>;
+		battery,recharge_condition_soc = <98>; /* no need */
+		battery,recharge_condition_vcell = <4130>;
 
 		battery,charging_total_time = <14400>;
 		battery,hv_charging_total_time = <10800>;
 		battery,normal_charging_total_time = <18000>;
 		battery,usb_charging_total_time = <36000>;
 		battery,recharging_total_time = <5400>;
-		battery,charging_reset_time = <0>;		
+		battery,charging_reset_time = <0>;
 
-		battery,chg_float_voltage = <4350>;
+		battery,chg_float_voltage = <4200>;
 
 		battery,self_discharging_en;
 		battery,force_discharging_limit = <650>;
@@ -226,13 +225,13 @@
 		battery,discharging_ntc_limit = <2750>;
 
 		battery,swelling_high_temp_block = <410>;
-		battery,swelling_high_temp_recov = <360>;
+		battery,swelling_high_temp_recov = <390>;
 		battery,swelling_low_temp_block = <100>;
 		battery,swelling_low_temp_recov = <150>;
 		battery,swelling_chg_current = <1100>;
-		battery,swelling_drop_float_voltage = <4150>;
-		battery,swelling_high_rechg_voltage = <4100>;
-		battery,swelling_low_rechg_voltage = <4000>;
+		battery,swelling_drop_float_voltage = <4000>;
+		battery,swelling_high_rechg_voltage = <3850>;
+		battery,swelling_low_rechg_voltage = <3850>;
 		battery,swelling_block_time = <600>;
 		battery,swelling_wc_chg_current = <750>;	/* 0.8C * 0.3C */
 
@@ -241,11 +240,11 @@
 		battery,camera_temp_recov = <0>;
 
 		/* cycle, chg_float_voltage, recharge_condition_vcell, full_condition_vcell, full_condition_soc */
-		battery,age_data = <0 4350 4300 4250 93
-				200 4330 4280 4230 89
-				250 4310 4260 4210 85
-				300 4290 4240 4190 80
-				1000 4240 4190 4140 75>;
+		battery,age_data = <0 4200 4130 4100 93
+				200 4175 4105 4075 89
+				250 4162 4092 4062 85
+				300 4137 4067 4037 80
+				1000 4087 4017 3987 75>;
 
 		io-channels = <&exynos_adc 1>, <&exynos_adc 3>, <&exynos_adc 6>, <&exynos_adc 5>, <&exynos_adc 7>, <&exynos_adc 4>;
 		io-channel-names = "adc-temp", "chg-adc-temp", "in-bat-adc", "discharging-check-adc", "ntc-check-adc", "camera-adc-temp";
@@ -253,7 +252,7 @@
 		io-channel-ranges;
 
 		battery,cisd_cap_high_thr = <3550>;
-		battery,cisd_cap_low_thr = <3050>;
+		battery,cisd_cap_low_thr = <2050>;
 		battery,cisd_cap_limit = <2805>;
 	};
 
@@ -295,21 +294,23 @@
 		fuelgauge,capacity_min = <0>;
 		fuelgauge,capacity_calculation_type = <28>;
 		fuelgauge,repeated_fuelalert;
+		fuelgauge,rcomp0 = <0x3a>;
+		fuelgauge,rcomp_charging = <0x3a>;
 		fuelgauge,using_temp_compensation;
 		fuelgauge,using_hw_vempty;
 		fuelgauge,v_empty = <0xA558>;
 		fuelgauge,v_empty_origin = <0x7D54>;
+		fuelgauge,sw_v_empty_voltage = <3100>;
+		fuelgauge,sw_v_empty_recover_voltage = <3380>;
 		fuelgauge,qrtable20 = <0x1603>;
 		fuelgauge,qrtable30 = <0x1005>;
 		fuelgauge,low_temp_limit = <100>;
 		fuelgauge,low_temp_recovery = <120>;
-		fuelgauge,temp_cohot = <0x1B45>;
-		fuelgauge,temp_cocold = <0x194D>;
-		fuelgauge,rcomp0 = <0x35>;
-		fuelgauge,rcomp_charging = <0x35>;
+		fuelgauge,temp_cohot = <0x1739>;
+		fuelgauge,temp_cocold = <0x1739>;
 		fuelgauge,is_using_model_data;
 		fuelgauge,type_str = "SDI";
-		fuelgauge,capacity = <0x1438>;
+		fuelgauge,capacity = <0x1089>;
 		fuelgauge,low_battery_comp_voltage = <3600>;
 		fuelgauge,low_battery_table = <(-5000) 0 0 (-1250) 0 3320 (-750) 97 3451 (-100) 96 3461 0 0 3456>;
 		fuelgauge,cv_data = <2565  680    2580
@@ -405,7 +406,7 @@
 		battery,chg_polarity_en = <0>;
 		battery,chg_gpio_status = <0>;
 		battery,chg_polarity_status = <0>;
-		battery,chg_float_voltage = <4350>;
+		battery,chg_float_voltage = <4200>;
 	};
 
 };

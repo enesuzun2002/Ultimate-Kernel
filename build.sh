@@ -32,6 +32,7 @@ DTB_PADDING=0
 DEFCONFIG=ultimate_defconfig
 DEFCONFIG_S6EDGE=ultimate_defconfig_edge
 DEFCONFIG_S6FLAT=ultimate_defconfig_flat
+TMOBILE_DEFCONFIG=ultimate_defconfig_tmobile
 
 export K_VERSION="v1.2.1"
 export K_NAME="Ultimate-Kernel"
@@ -74,6 +75,10 @@ FUNC_BUILD_KERNEL()
 	cp -f $RDIR/arch/$ARCH/configs/$DEFCONFIG $RDIR/arch/$ARCH/configs/tmp_defconfig
 	cat $RDIR/arch/$ARCH/configs/$KERNEL_DEFCONFIG >> $RDIR/arch/$ARCH/configs/tmp_defconfig
 
+if [ $TMOBILE == "1" ]; then
+    cat $RDIR/arch/$ARCH/configs/$TMOBILE_DEFCONFIG >> $RDIR/arch/$ARCH/configs/tmp_defconfig
+fi
+
 	#FUNC_CLEAN_DTB
 
 	make -j$BUILD_JOB_NUMBER ARCH=$ARCH \
@@ -92,18 +97,35 @@ FUNC_BUILD_DTB()
 		echo "You need to run ./build.sh first!"
 		exit 1
 	}
-	case $MODEL in
+
+if [ $TMOBILE == "1" ]; then
+    case $MODEL in
 	G920)
+		DTSFILES="exynos7420-zeroflte_usa_00 exynos7420-zeroflte_usa_01 exynos7420-zeroflte_usa_02 exynos7420-zeroflte_usa_03 exynos7420-zeroflte_usa_04 exynos7420-zeroflte_usa_05"
+		;;
+	G925)
+		DTSFILES="exynos7420-zerolte_usa_01 exynos7420-zerolte_usa_02 exynos7420-zerolte_usa_03 exynos7420-zerolte_usa_04 exynos7420-zerolte_usa_05 exynos7420-zerolte_usa_06 exynos7420-zerolte_usa_07 exynos7420-zerolte_usa_08"
+		;;
+    *)
+    echo "Unknown device: $MODEL"
+	exit 1
+	;;
+	esac
+else
+    case $MODEL in
+    G920)
 		DTSFILES="exynos7420-zeroflte_eur_open_00 exynos7420-zeroflte_eur_open_01 exynos7420-zeroflte_eur_open_02 exynos7420-zeroflte_eur_open_03 exynos7420-zeroflte_eur_open_04 exynos7420-zeroflte_eur_open_05 exynos7420-zeroflte_eur_open_06 exynos7420-zeroflte_eur_open_07"
 		;;
 	G925)
 		DTSFILES="exynos7420-zerolte_eur_open_01 exynos7420-zerolte_eur_open_02 exynos7420-zerolte_eur_open_03 exynos7420-zerolte_eur_open_04 exynos7420-zerolte_eur_open_05 exynos7420-zerolte_eur_open_06 exynos7420-zerolte_eur_open_07 exynos7420-zerolte_eur_open_08"
 		;;
-	*)
-		echo "Unknown device: $MODEL"
+    *)
+    echo "Unknown device: $MODEL"
 		exit 1
 		;;
 	esac
+fi
+
 	mkdir -p $OUTDIR $DTBDIR
 	cd $DTBDIR || {
 		echo "Unable to cd to $DTBDIR!"
@@ -239,7 +261,10 @@ echo ""
 echo "S6 Nougat"
 echo "(1) S6 Flat SM-G920F"
 echo "(2) S6 Edge SM-G925F"
-echo "(3) S6 Edge + Flat"
+echo "(3) S6 Edge + Flat International"
+echo "(4) S6 Flat SM-G920T"
+echo "(5) S6 Edge SM-G925T"
+echo "(6) S6 Edge + Flat Tmobile"
 echo ""
 echo ""
 read -p "Select an option to compile the kernel " prompt
@@ -249,6 +274,7 @@ if [ $prompt == "1" ]; then
     MODEL=G920
     DEVICE=$S6DEVICE
     KERNEL_DEFCONFIG=$DEFCONFIG_S6FLAT
+    TMOBILE=0
     LOG=$FLAT_LOG
     export KERNEL_VERSION="$K_NAME-Pie-$K_VERSION"
     echo "S6 Flat G920F Selected"
@@ -258,6 +284,7 @@ elif [ $prompt == "2" ]; then
     MODEL=G925
     DEVICE=$S6DEVICE
     KERNEL_DEFCONFIG=$DEFCONFIG_S6EDGE
+    TMOBILE=0
     LOG=$EDGE_LOG
     export KERNEL_VERSION="$K_NAME-Pie-$K_VERSION"
     echo "S6 Edge G925F Selected"
@@ -267,16 +294,56 @@ elif [ $prompt == "3" ]; then
     MODEL=G925
     DEVICE=$S6DEVICE
     KERNEL_DEFCONFIG=$DEFCONFIG_S6EDGE
+    TMOBILE=0
     LOG=$EDGE_LOG
     export KERNEL_VERSION="$K_NAME-Pie-$K_VERSION"
-    echo "S6 EDGE + FLAT Selected"
+    echo "S6 EDGE + FLAT International Selected"
     echo "Compiling EDGE ..."
     MAIN2
     MODEL=G920
     KERNEL_DEFCONFIG=$DEFCONFIG_S6FLAT
+    TMOBILE=0
     LOG=$FLAT_LOG
     export KERNEL_VERSION="$K_NAME-Oreo-$K_VERSION"
     echo "Compiling FLAT ..."
     ZIP_NAME=$K_NAME-G92X-N-$K_VERSION.zip
+    MAIN
+elif [ $prompt == "4" ]; then
+    MODEL=G920
+    DEVICE=$S6DEVICE
+    KERNEL_DEFCONFIG=$DEFCONFIG_S6FLAT
+    TMOBILE=1
+    LOG=$FLAT_LOG
+    export KERNEL_VERSION="$K_NAME-Pie-$K_VERSION"
+    echo "S6 Flat G920T Selected"
+    ZIP_NAME=$K_NAME-$MODELT-N-$K_VERSION.zip
+    MAIN
+elif [ $prompt == "5" ]; then
+    MODEL=G925
+    DEVICE=$S6DEVICE
+    KERNEL_DEFCONFIG=$DEFCONFIG_S6EDGE
+    TMOBILE=1
+    LOG=$EDGE_LOG
+    export KERNEL_VERSION="$K_NAME-Pie-$K_VERSION"
+    echo "S6 Edge G925T Selected"
+    ZIP_NAME=$K_NAME-$MODELT-N-$K_VERSION.zip
+    MAIN
+elif [ $prompt == "6" ]; then
+    MODEL=G925
+    DEVICE=$S6DEVICE
+    KERNEL_DEFCONFIG=$DEFCONFIG_S6EDGE
+    TMOBILE=1
+    LOG=$EDGE_LOG
+    export KERNEL_VERSION="$K_NAME-Pie-$K_VERSION"
+    echo "S6 EDGE + FLAT Tmobile Selected"
+    echo "Compiling EDGE ..."
+    MAIN2
+    MODEL=G920
+    KERNEL_DEFCONFIG=$DEFCONFIG_S6FLAT
+    TMOBILE=1
+    LOG=$FLAT_LOG
+    export KERNEL_VERSION="$K_NAME-Oreo-$K_VERSION"
+    echo "Compiling FLAT ..."
+    ZIP_NAME=$K_NAME-G92XT-N-$K_VERSION.zip
     MAIN
 fi
