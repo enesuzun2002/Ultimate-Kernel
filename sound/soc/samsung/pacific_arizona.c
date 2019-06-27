@@ -18,7 +18,11 @@
 #include <linux/input.h>
 #include <linux/delay.h>
 #include <linux/wakelock.h>
+#if (defined CONFIG_SWITCH_ANTENNA_EARJACK \
+	 || defined CONFIG_SWITCH_ANTENNA_EARJACK_IF) \
+	 && (!defined CONFIG_SEC_FACTORY)
 #include <linux/antenna_switch.h>
+#endif
 #include <linux/mfd/arizona/registers.h>
 #include <linux/mfd/arizona/core.h>
 
@@ -47,7 +51,6 @@
 #endif
 
 #include <sound/samsung_audio_debugfs.h>
-#include <linux/variant_detection.h>
 
 /* PACIFIC use CLKOUT from AP */
 #define PACIFIC_MCLK_FREQ	24000000
@@ -252,9 +255,12 @@ void pacific_arizona_hpdet_cb(unsigned int meas)
 
 	dev_info(the_codec->dev, "%s(%d) meas(%d)\n", __func__, jack_det, meas);
 
-
-if (variant_aif_required == NO_AIF)
+#if (defined CONFIG_SWITCH_ANTENNA_EARJACK \
+	 || defined CONFIG_SWITCH_ANTENNA_EARJACK_IF) \
+	 && (!defined CONFIG_SEC_FACTORY)
+	/* Notify jack condition to other devices */
 	antenna_switch_work_earjack(jack_det);
+#endif
 
 	num_hp_gain_table = (int) ARRAY_SIZE(hp_gain_table);
 	for (i = 0; i < num_hp_gain_table; i++) {
@@ -291,16 +297,13 @@ void pacific_update_impedance_table(struct device_node *np)
 	if (!the_codec)
 		return;
 
-	if (variant_aif_required == HAS_AIF) {
-		if (!of_property_read_u32_array(np, "imp_table", data, (len * 3))) {
-			  dev_info(the_codec->dev, "%s: data from DT\n", __func__);
+	if (!of_property_read_u32_array(np, "imp_table", data, (len * 3))) {
+		dev_info(the_codec->dev, "%s: data from DT\n", __func__);
 
-			  for (i = 0; i < len; i++) {
-			  hp_gain_table[i].min = data[i * 3];
-			  hp_gain_table[i].max = data[(i * 3) + 1];
-			  hp_gain_table[i].gain = data[(i * 3) + 2];
-			  
-			  }
+		for (i = 0; i < len; i++) {
+			hp_gain_table[i].min = data[i * 3];
+			hp_gain_table[i].max = data[(i * 3) + 1];
+			hp_gain_table[i].gain = data[(i * 3) + 2];
 		}
 	}
 
@@ -1557,12 +1560,9 @@ static int pacific_of_get_pdata(struct snd_soc_card *card)
 	priv->seamless_voicewakeup =
 		of_property_read_bool(pdata_np, "seamless_voicewakeup");
 
-	if (variant_aif_required == HAS_AIF) {
-		of_property_read_u32_array(pdata_np, "aif_format",
+	ret = of_property_read_u32_array(pdata_np, "aif_format",
 			priv->aif_format, ARRAY_SIZE(priv->aif_format));
-	of_property_read_u32_array(pdata_np, "aif_format_tdm",
-			priv->aif_format_tdm, ARRAY_SIZE(priv->aif_format_tdm));
-	} else {
+	if (ret == -EINVAL) {
 		priv->aif_format[0] =  SND_SOC_DAIFMT_I2S
 					| SND_SOC_DAIFMT_NB_NF
 					| SND_SOC_DAIFMT_CBM_CFM;
@@ -1573,6 +1573,9 @@ static int pacific_of_get_pdata(struct snd_soc_card *card)
 					| SND_SOC_DAIFMT_NB_NF
 					| SND_SOC_DAIFMT_CBM_CFM;
 	}
+
+	of_property_read_u32_array(pdata_np, "aif_format_tdm",
+			priv->aif_format_tdm, ARRAY_SIZE(priv->aif_format_tdm));
 
 	return 0;
 }
