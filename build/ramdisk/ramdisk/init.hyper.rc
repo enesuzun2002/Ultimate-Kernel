@@ -18,6 +18,7 @@ on boot
     copy /efs/Battery/prev_batt_capacity_max /sys/class/power_supply/battery/batt_capacity_max
 
    # Start Logging
+on property:init.hyper_logger=1
    start hyper_log
 
 on property:sys.boot_completed=1
