@@ -38,3 +38,6 @@ ro.bootimage.build.fingerprint=samsung/zerofltexx/zeroflte:7.0/NRD90M/G920FXXS5E
 
 # Secure-Storage
 ro.securestorage.support=false
+
+# HWC
+debug.sf.latch_unsignaled=1
