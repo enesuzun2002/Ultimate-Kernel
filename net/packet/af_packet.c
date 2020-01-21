@@ -1307,7 +1307,6 @@ static int fanout_add(struct sock *sk, u16 id, u16 type_flags)
 	default:
 		return -EINVAL;
 	}
-
 	mutex_lock(&fanout_mutex);
 
 	err = -EINVAL;
@@ -1315,6 +1314,7 @@ static int fanout_add(struct sock *sk, u16 id, u16 type_flags)
 		goto out;
 
 	err = -EALREADY;
+
 	if (po->fanout)
 		goto out;
 
@@ -1350,7 +1350,10 @@ static int fanout_add(struct sock *sk, u16 id, u16 type_flags)
 		list_add(&match->list, &fanout_list);
 	}
 	err = -EINVAL;
-	if (match->type == type &&
+
+	spin_lock(&po->bind_lock);
+	if (po->running &&
+		match->type == type &&
 	    match->prot_hook.type == po->prot_hook.type &&
 	    match->prot_hook.dev == po->prot_hook.dev) {
 		err = -ENOSPC;
@@ -1361,6 +1364,11 @@ static int fanout_add(struct sock *sk, u16 id, u16 type_flags)
 			__fanout_link(sk, po);
 			err = 0;
 		}
+	}
+	spin_unlock(&po->bind_lock);
+	if (err && !atomic_read(&match->sk_ref)) {
+		list_del(&match->list);
+		kfree(match);
 	}
 out:
 	mutex_unlock(&fanout_mutex);
@@ -3187,6 +3195,7 @@ packet_setsockopt(struct socket *sock, int level, int optname, char __user *optv
 			return -EFAULT;
 		if (val > INT_MAX)
 			return -EINVAL;
+
 		lock_sock(sk);
 		if (po->rx_ring.pg_vec || po->tx_ring.pg_vec) {
 			ret = -EBUSY;
