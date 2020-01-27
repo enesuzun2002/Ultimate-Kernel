@@ -852,7 +852,7 @@
 	ipa_pdata {
 		compatible = "samsung,exynos-ipa";
 
-		control_temp = <90>;
+		control_temp = <45>;
 		temp_threshold = <10>;
 		enabled = <1>;
 		tdp = <3500>;
