@@ -34,7 +34,7 @@ DEFCONFIG_S6EDGE=ultimate_defconfig_edge
 DEFCONFIG_S6FLAT=ultimate_defconfig_flat
 TMOBILE_DEFCONFIG=ultimate_defconfig_tmobile
 
-export K_VERSION="v1.4.1"
+export K_VERSION="v1.4.3"
 export K_NAME="Ultimate-Kernel"
 export REVISION="RC"
 export KBUILD_BUILD_VERSION="1"
