@@ -1002,15 +1002,8 @@ static int xpad_led_probe(struct usb_xpad *xpad)
 	if (error)
 		goto err_free_id;
 
-	if (xpad->xtype == XTYPE_XBOX360) {
-		/*
-		 * Light up the segment corresponding to controller
-		 * number on wired devices. On wireless we'll do that
-		 * when they respond to "presence" packet.
-		 */
-		xpad_identify_controller(xpad);
-	}
-
+	/* Light up the segment corresponding to controller number */
+	xpad_identify_controller(xpad);
 	return 0;
 
 err_free_id:
