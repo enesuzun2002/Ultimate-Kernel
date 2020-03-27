@@ -16,7 +16,6 @@
 #include <linux/slab.h>
 #include <linux/cpufreq.h>
 #include <linux/clk-private.h>
-#include <linux/clocker.h>
 
 #include <mach/map.h>
 #include <mach/regs-clock.h>
@@ -310,11 +309,10 @@ static void __init set_volt_table_CA53(void)
 	case 12 :
 		max_support_idx_CA53 = L7; break;	/* 1.3GHz */
 	default :
-		max_support_idx_CA53 = G92X_CPU_MAX_FREQ_LITTLE;
+		max_support_idx_CA53 = L5;	/* 1.5GHz */
 	}
 
-	min_support_idx_CA53 = G92X_CPU_MIN_FREQ_LITTLE;
-
+	min_support_idx_CA53 = L16;	/* 400MHz */
 	pr_info("CPUFREQ of CA53 max_freq : L%d %u khz\n", max_support_idx_CA53,
 		exynos7420_freq_table_CA53[max_support_idx_CA53].frequency);
 	pr_info("CPUFREQ of CA53 min_freq : L%d %u khz\n", min_support_idx_CA53,
