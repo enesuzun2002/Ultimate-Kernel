@@ -514,13 +514,13 @@ config CPU_FREQ_GOV_HYPER
 	'hyper' - A tweaked "ondemand" based smart and smooth optimized governor!
 	If in doubt, say N.
 
-config EXYNOS7420_CPU_UNDERCLOCK
+config G92X_CPU_UNDERCLOCK
 	bool "Exynos7420 min cpu frequenz"
 	depends on ARM_EXYNOS7420_CPUFREQ
 	help
 	   Sets Apollo and Atlas clusters to min cpu frequenz
 	   
-config EXYNOS7420_CPU_OVERCLOCK
+config G92X_CPU_OVERCLOCK
 	bool "Exynos7420 max cpu frequenz"
 	depends on ARM_EXYNOS7420_CPUFREQ
 	help
