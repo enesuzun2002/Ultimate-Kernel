@@ -1,6 +1,6 @@
 on init
 
-service sswap /sbin/sswap -s -f 2048
+service sswap /sbin/sswap -s -f 1024
     class core
     user root
     group root
