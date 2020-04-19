@@ -5,7 +5,6 @@ import init.carrier.rc
 import init.fac.rc
 import init.zerolte_fac.rc
 import init.gps.rc
-import init.hyper.rc
 
 on early-init
     mount debugfs /sys/kernel/debug /sys/kernel/debug
@@ -702,6 +701,10 @@ on fs
     chown system radio /sys/class/sensors/irled_remote/irled_send
     chown system radio /sys/class/sensors/irled_remote/irled_send_result
 
+# Optimize interactive governor
+   write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads 75 800000:11 1400000:84
+   write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads 80 900000:11 1200000:83 1704000:85
+
 # Copy DRM Key
     copy /system/app/wv.keys /factory/wv.keys
 
@@ -765,6 +768,10 @@ on property:ro.debuggable=1
 on property:sys.boot_completed=1
     write /proc/sys/vm/dirty_bytes 62914560
     write /proc/sys/vm/dirty_background_bytes 20971520
+
+# Enable io_is_busy
+	write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
+	write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
 
 # LPM
 on property:ro.bootmode=charger

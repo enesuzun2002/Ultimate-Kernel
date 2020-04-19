@@ -13,7 +13,7 @@
 # -----
 export ARCH=arm64
 export SUBARCH=arm64
-export BUILD_CROSS_COMPILE=/home/enesuzun200227/LineageOS/prebuilts/linaro/linux-x86/aarch64/bin/aarch64-linux-gnu-
+export BUILD_CROSS_COMPILE=/home/enesuzun200227/los/prebuilts/linaro/linux-x86/aarch64/bin/aarch64-linux-gnu-
 export CROSS_COMPILE=$BUILD_CROSS_COMPILE
 export BUILD_JOB_NUMBER=`grep processor /proc/cpuinfo|wc -l`
 export USE_CCACHE=1
@@ -34,14 +34,13 @@ DEFCONFIG_S6EDGE=ultimate_defconfig_edge
 DEFCONFIG_S6FLAT=ultimate_defconfig_flat
 TMOBILE_DEFCONFIG=ultimate_defconfig_tmobile
 
-export K_VERSION="v1.4.5"
+export K_VERSION="v1.4.7"
 export K_NAME="Ultimate-Kernel"
 export REVISION="RC"
 export KBUILD_BUILD_VERSION="1"
 S6DEVICE="Nougat"
 EDGE_LOG=Edge_build.log
 FLAT_LOG=Flat_build.log
-PORT=0
 
 
 # FUNCTIONS
