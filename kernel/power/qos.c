@@ -860,6 +860,9 @@ static int __init pm_qos_power_init(void)
 
 	BUILD_BUG_ON(ARRAY_SIZE(pm_qos_array) != PM_QOS_NUM_CLASSES);
 
+	/* Don't let userspace impose restrictions on CPU idle levels */
+	return 0;
+
 	for (i = 1; i < PM_QOS_NUM_CLASSES; i++) {
 		ret = register_pm_qos_misc(pm_qos_array[i]);
 		if (ret < 0) {
