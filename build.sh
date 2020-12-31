@@ -34,7 +34,7 @@ DEFCONFIG_S6EDGE=ultimate_defconfig_edge
 DEFCONFIG_S6FLAT=ultimate_defconfig_flat
 TMOBILE_DEFCONFIG=ultimate_defconfig_tmobile
 
-export K_VERSION="v1.4.7"
+export K_VERSION="v1.5"
 export K_NAME="Ultimate-Kernel"
 export REVISION="RC"
 export KBUILD_BUILD_VERSION="1"
@@ -177,7 +177,7 @@ FUNC_BUILD_RAMDISK()
 
 	cp -f image-new.img $RDIR/build
 	cd ..
-	rm -rf temp
+	# rm -rf temp
 	echo SEANDROIDENFORCE >> image-new.img
 	mv image-new.img $MODEL-boot.img
 }
