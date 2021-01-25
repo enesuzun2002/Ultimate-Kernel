@@ -97,7 +97,7 @@
 	};
 
 	chosen {
-		bootargs = "console=ttySAC1,115200n8 ess_setup=0x46000000";
+		bootargs = "console=ttySAC1,115200n8 ess_setup=0x46000000 nosoftlockup mce=ignore_ce";
 		linux,initrd-start = <0x42000000>;
 		linux,initrd-end = <0x420FFFFF>;
 	};
