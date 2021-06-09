@@ -13,7 +13,7 @@
 # -----
 export ARCH=arm64
 export SUBARCH=arm64
-export BUILD_CROSS_COMPILE=/home/enes/aarch64-linux-android-8.x/bin/aarch64-linux-android-
+export BUILD_CROSS_COMPILE=/home/enes/android/aarch64-linux-android-8.x/bin/aarch64-linux-android-
 export CROSS_COMPILE=$BUILD_CROSS_COMPILE
 export BUILD_JOB_NUMBER=`grep processor /proc/cpuinfo|wc -l`
 export USE_CCACHE=1
@@ -45,13 +45,6 @@ FLAT_LOG=Flat_build.log
 
 # FUNCTIONS
 # ---------
-FUNC_DELETE_PLACEHOLDERS()
-{
-	find . -name \.placeholder -type f -delete
-        echo "Placeholders Deleted from Ramdisk"
-        echo ""
-}
-
 FUNC_CLEAN_DTB()
 {
 	if ! [ -d $RDIR/arch/$ARCH/boot/dts ] ; then
@@ -60,8 +53,10 @@ FUNC_CLEAN_DTB()
 		echo "rm files in : "$RDIR/arch/$ARCH/boot/dts/*.dtb""
 		rm $RDIR/arch/$ARCH/boot/dts/*.dtb
 		rm $RDIR/arch/$ARCH/boot/dtb/*.dtb
-		rm $RDIR/arch/$ARCH/boot/boot.img-dtb
-		rm $RDIR/arch/$ARCH/boot/boot.img-zImage
+		rm $RDIR/arch/$ARCH/boot/dtb.img
+		rm $RDIR/arch/$ARCH/boot/Image
+		rm -rf $RDIR/build/ak3/Image
+		rm -rf $RDIR/build/ak3/dtb.img
 	fi
 }
 
@@ -143,63 +138,35 @@ fi
 	echo "Done."
 }
 
-FUNC_BUILD_RAMDISK()
+FUNC_CP_AK3()
 {
 	echo ""
-	echo "Building Ramdisk"
-	mv $RDIR/arch/$ARCH/boot/Image $RDIR/arch/$ARCH/boot/boot.img-zImage
-	mv $RDIR/arch/$ARCH/boot/dtb.img $RDIR/arch/$ARCH/boot/boot.img-dtb
-	
-	cd $RDIR/build
-	mkdir temp
-	cp -rf aik/. temp
-	cp -rf ramdisk/. temp
-	
-	rm -f temp/split_img/boot.img-zImage
-	rm -f temp/split_img/boot.img-dtb
-	mv $RDIR/arch/$ARCH/boot/boot.img-zImage temp/split_img/boot.img-zImage
-	mv $RDIR/arch/$ARCH/boot/boot.img-dtb temp/split_img/boot.img-dtb
-	cd temp
-
-	case $MODEL in
-	G925)
-		echo "Ramdisk for G925"
-		;;
-	G920)
-		echo "Ramdisk for G920"
-
-		;;
-	esac
-
-		echo "Done"
-
-	./repackimg.sh
-
-	cp -f image-new.img $RDIR/build
-	cd ..
-	# rm -rf temp
-	echo SEANDROIDENFORCE >> image-new.img
-	mv image-new.img $MODEL-boot.img
+	echo "Copying kernel and dtb image to AnyKernel3 Folder"
+	mv $RDIR/arch/$ARCH/boot/Image $RDIR/build/ak3/Image
+	mv $RDIR/arch/$ARCH/boot/dtb.img $RDIR/build/ak3/dtb.img
 }
 
 FUNC_BUILD_FLASHABLES()
 {
-	cd $RDIR/build
-	mkdir temp2
-	cp -rf zip/common/. temp2
-    	mv *.img temp2/
-	cd temp2
+	cd $RDIR/build/ak3
 	echo ""
-	echo "Compressing kernels..."
-	tar cv *.img | xz -9 > kernel.tar.xz
-	mv kernel.tar.xz script/
-	rm -f *.img
+	echo "Creating flashables..."
+	zip -r9 ../$ZIP_NAME * -x README.md ../$ZIP_NAME
+}
 
-	zip -9 -r ../$ZIP_NAME *
+CLEAN()
+{
+	# Clean Build Data
+	make clean
+	make ARCH=arm64 distclean
+	rm -rf $RDIR/build/ak3/Image
+	rm -rf $RDIR/build/ak3/dtb.img
 
-	cd ..
-    	rm -rf temp2
+	# Remove Release files
+	rm -f $PWD/arch/arm64/configs/tmp_defconfig
 
+	# Removed Created dtb Folder
+	rm -rf $PWD/arch/arm64/boot/dtb
 }
 
 
@@ -212,10 +179,9 @@ MAIN()
 
 (
 	START_TIME=`date +%s`
-	FUNC_DELETE_PLACEHOLDERS
 	FUNC_BUILD_KERNEL
 	FUNC_BUILD_DTB
-	FUNC_BUILD_RAMDISK
+	FUNC_CP_AK3
 	FUNC_BUILD_FLASHABLES
 	END_TIME=`date +%s`
 	let "ELAPSED_TIME=$END_TIME-$START_TIME"
@@ -232,10 +198,9 @@ MAIN2()
 
 (
 	START_TIME=`date +%s`
-	FUNC_DELETE_PLACEHOLDERS
 	FUNC_BUILD_KERNEL
 	FUNC_BUILD_DTB
-	FUNC_BUILD_RAMDISK
+	FUNC_CP_AK3
 	END_TIME=`date +%s`
 	let "ELAPSED_TIME=$END_TIME-$START_TIME"
 	echo "Total compile time is $ELAPSED_TIME seconds"
@@ -264,6 +229,7 @@ echo "(3) S6 Edge + Flat International"
 echo "(4) S6 Flat SM-G920T"
 echo "(5) S6 Edge SM-G925T"
 echo "(6) S6 Edge + Flat Tmobile"
+echo "(7) CLEAN"
 echo ""
 echo ""
 read -p "Select an option to compile the kernel " prompt
@@ -345,4 +311,7 @@ elif [ $prompt == "6" ]; then
     echo "Compiling FLAT ..."
     ZIP_NAME=$K_NAME-G92XT-N-$K_VERSION.zip
     MAIN
+elif [ $prompt == "7" ]; then
+    echo "Cleaning source directory..."
+    CLEAN
 fi
