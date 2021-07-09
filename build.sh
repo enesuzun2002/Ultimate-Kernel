@@ -13,7 +13,7 @@
 # -----
 export ARCH=arm64
 export SUBARCH=arm64
-export BUILD_CROSS_COMPILE=/home/enes/android/aarch64-linux-android-8.x/bin/aarch64-linux-android-
+export BUILD_CROSS_COMPILE=/home/ssd2tb/enesuzun2002/android/aarch64-linux-android-4.9/bin/aarch64-linux-android-
 export CROSS_COMPILE=$BUILD_CROSS_COMPILE
 export BUILD_JOB_NUMBER=`grep processor /proc/cpuinfo|wc -l`
 export USE_CCACHE=1
