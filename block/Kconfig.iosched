@@ -14,7 +14,7 @@ config IOSCHED_NOOP
 
 config IOSCHED_DEADLINE
 	tristate "Deadline I/O scheduler"
-	default y
+	default n
 	---help---
 	  The deadline I/O scheduler is simple and compact. It will provide
 	  CSCAN service with FIFO expiration of requests, switching to
@@ -23,7 +23,7 @@ config IOSCHED_DEADLINE
 
 config IOSCHED_ROW
 	tristate "ROW I/O scheduler"
-	default y
+	default n
 	---help---
 	  The ROW I/O scheduler gives priority to READ requests over the
 	  WRITE requests when dispatching, without starving WRITE requests.
@@ -34,7 +34,7 @@ config IOSCHED_ROW
 
 config IOSCHED_CFQ
 	tristate "CFQ I/O scheduler"
-	default y
+	default n
 	---help---
 	  The CFQ I/O scheduler tries to distribute bandwidth equally
 	  among all processes in the system. It should provide a fair
@@ -53,7 +53,7 @@ config IOSCHED_TRIPNDROID
 
 config IOSCHED_SIOPLUS
 	tristate "Simple I/O scheduler plus"
-	default y
+	default n
 	---help---
 	  The Simple I/O scheduler is an extremely simple scheduler,
 	  based on noop and deadline, that relies on deadlines to
@@ -63,7 +63,7 @@ config IOSCHED_SIOPLUS
 
 config IOSCHED_SIO
 	tristate "Simple I/O scheduler"
-	default y
+	default n
 	---help---
 	The Simple I/O scheduler is an extremely simple scheduler,
 	based on noop and deadline, that relies on deadlines to
@@ -73,21 +73,21 @@ config IOSCHED_SIO
 
 config IOSCHED_ZEN
 	tristate "Zen I/O scheduler"
-	default y
+	default n
 	---help---
 	FCFS, dispatches are back-inserted, deadlines ensure fairness.
         Should work best with devices where there is no travel delay.
 
 config IOSCHED_VR
 	tristate "V(R) I/O scheduler"
-	default y
+	default n
 	---help---
 	Requests are chosen according to SSTF with a penalty of rev_penalty
 	for switching head direction.	  
 
 config IOSCHED_BFQ
 	tristate "BFQ I/O scheduler"
-	default y
+	default n
 	---help---
 	  The BFQ I/O scheduler tries to distribute bandwidth among
 	  all processes according to their weights.
@@ -99,7 +99,7 @@ config IOSCHED_BFQ
 
 config IOSCHED_FIOPS
 	tristate "IOPS based I/O scheduler"
-	default y
+	default n
 	---help---
 	  This is an IOPS based I/O scheduler. It will try to distribute
           IOPS equally among all processes in the system. It's mainly for
@@ -110,7 +110,7 @@ config IOSCHED_FIOPS
 config CGROUP_BFQIO
 	bool "BFQ hierarchical scheduling support"
 	depends on CGROUPS && IOSCHED_BFQ=y
-	default y
+	default n
 	---help---
 	  Enable hierarchical scheduling in BFQ, using the cgroups
 	  filesystem interface.  The name of the subsystem will be
@@ -125,7 +125,7 @@ config CFQ_GROUP_IOSCHED
 
 config IOSCHED_FIOPS
 	tristate "IOPS based I/O scheduler"
-	default y
+	default n
 	---help---
 	  This is an IOPS based I/O scheduler. It will try to distribute
           IOPS equally among all processes in the system. It's mainly for
@@ -133,7 +133,7 @@ config IOSCHED_FIOPS
 
 config IOSCHED_MAPLE
 	tristate "Maple I/O scheduler"
-	default y
+	default n
 
 choice
 	prompt "Default I/O scheduler"
