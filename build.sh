@@ -143,7 +143,7 @@ FUNC_CP_AK3()
 	echo ""
 	echo "Copying kernel and dtb image to AnyKernel3 Folder"
 	mv $RDIR/arch/$ARCH/boot/Image $RDIR/build/ak3/Image
-	mv $RDIR/arch/$ARCH/boot/dtb.img $RDIR/build/ak3/dtb.img
+	mv $RDIR/arch/$ARCH/boot/dtb.img $RDIR/build/ak3/dt.img
 }
 
 FUNC_BUILD_FLASHABLES()
