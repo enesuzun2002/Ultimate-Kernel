@@ -98,6 +98,6 @@ x509.genkey
 !/init/vmm.elf
 
 build/ak3/Image
-build/ak3/dtb.img
+build/ak3/dt.img
 arch/arm64/boot/dtb/*
 build/Ultimate-Kernel-G92*
