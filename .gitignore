@@ -101,3 +101,4 @@ build/ak3/Image
 build/ak3/dt.img
 arch/arm64/boot/dtb/*
 build/Ultimate-Kernel-G92*
+*.log
